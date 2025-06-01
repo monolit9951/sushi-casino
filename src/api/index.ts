@@ -21,7 +21,7 @@ export interface ItemsInterface {
 export const getItemsSet = async (): Promise<ItemsInterface[]> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .get("/casino")
+      .get("/api/casino")
       .then((response) => {
         resolve(response.data);
       })
@@ -34,7 +34,7 @@ export const getItemsSet = async (): Promise<ItemsInterface[]> => {
 export const getWinner = async (code: string): Promise<ItemsInterface> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .get(`/casino/random?wincode=${code}`)
+      .get(`/api/casino/random?wincode=${code}`)
       .then((response) => {
         resolve(response.data);
       })
