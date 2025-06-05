@@ -21,7 +21,7 @@ export interface ItemsInterface {
 export const getItemsSet = async (): Promise<ItemsInterface[]> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .get("/casino")
+      .get("api/casino")
       .then((response) => {
         resolve(response.data);
       })
