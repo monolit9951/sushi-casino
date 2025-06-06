@@ -52,7 +52,7 @@ const Roulette: FC = () =>{
         if (spinning) return;
 
         // ТОЛЬКО ДЛЯ ОТЛАДКИ ПРОМОКОДА
-        if(promoInput === 'false'){
+        if(promoInput !== 'wincode_1'){
             setPromoAccess(false)
             return
         }
