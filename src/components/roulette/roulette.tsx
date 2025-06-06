@@ -35,9 +35,27 @@ const Roulette: FC = () =>{
     const [position, setPosition] = useState(0);
     const [spinning, setSpinning] = useState(false);
 
+
+    // ДЛЯ ОТЛАДКИ ПРОМОКОДА
+    // ЕСЛИ ПРОМОКОД ЕСЛИ false, выдаст уведомление ЕСЛИ ЛЮБОЕ ДРУГОЕ (В ТОМ ЧИСЛЕ ПОУСТОЕ - БУДЕТ СПИН)
+    const [promoAccess, setPromoAccess] = useState<boolean>(true)
+    const [promoInput, setPromoInput] = useState<string>('')
+
+    const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) =>{
+        setPromoInput(event.target.value)
+        setPromoAccess(true)
+    }
+
+
     // функция для прокрутки
     const startSpinning = () => {
         if (spinning) return;
+
+        // ТОЛЬКО ДЛЯ ОТЛАДКИ ПРОМОКОДА
+        if(promoInput === 'false'){
+            setPromoAccess(false)
+            return
+        }
 
         // ТУТ ПИСАТЬ КОД ДЛЯ ПРОМОКОДА
 
@@ -111,7 +129,8 @@ const Roulette: FC = () =>{
         </div>
 
         <div className="roulete_control">
-            <input type="text" className="roulete_promocodeInput" placeholder="Enter a Promo Code" />
+            <div className="roulete_control_noPromo">{promoAccess? '\u00A0' : 'Kod promocyjny nie znaleziony'}</div>
+            <input type="text" className={promoAccess? "roulete_promocodeInput" : "roulete_promocodeInput noPromo"} placeholder="Enter a Promo Code" onChange={(event) => handlePromoInput(event)}/>
             <button className="roulete_spin_button" onClick={startSpinning} disabled={spinning}>Spin a Wheel</button>
         </div>
     </div>

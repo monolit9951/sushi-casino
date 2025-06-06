@@ -1,4 +1,4 @@
-export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+// export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
 import Header from "../components/header/header";
 import './home.scss'
 import Roulette from "../components/roulette/roulette";
