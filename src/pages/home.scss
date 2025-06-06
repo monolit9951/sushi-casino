@@ -1,5 +1,6 @@
 main{
     background: url('../assets/images/background.svg');
+
     > .main_container{
         padding: 24px 0 0 0;
         
@@ -35,6 +36,21 @@ main{
                 display: grid;
                 gap: 8px;
                 grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            }
+        }
+    }
+}
+
+@media (max-width: 700px) {
+    main{
+        > .main_container{
+            > .itemsList{
+                > .itemsList_list{
+                    margin-top: 16px;
+                    display: grid;
+                    gap: 8px;
+                    grid-template-columns: 1fr 1fr 1fr;
+                }
             }
         }
     }
