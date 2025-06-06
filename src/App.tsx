@@ -1,4 +1,4 @@
-import Home from "./pages/Home.tsx";
+import Home from "./pages/home/Home.tsx";
 import "./index.scss";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "styled-components";

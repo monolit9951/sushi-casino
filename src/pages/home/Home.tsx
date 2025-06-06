@@ -1,8 +1,8 @@
 export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
-import Header from "../components/header/header";
+import Header from "../../components/header/header";
 import './home.scss'
-import Roulette from "../components/roulette/roulette";
-import Item from "../components/item/item";
+import Roulette from "../../components/roulette/roulette";
+import Item from "../../components/item/item";
 
 export const mockItems = [
   {

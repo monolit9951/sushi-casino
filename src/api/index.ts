@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { Rarity } from "../pages/Home.tsx";
+import { Rarity } from "../pages/home/Home.tsx";
 
 const BASE_URL = import.meta.env.VITE_APP_MAIN_API;
 
