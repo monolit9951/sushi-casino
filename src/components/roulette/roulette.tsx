@@ -2,6 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import './roulette.scss'
 import indicatorTop from '../../assets/images/rouleteIndicatorTop.svg'
 import indicatorBottom from '../../assets/images/rouleteIndicatorBottom.svg'
+import RouletteItem from "../rouletteItem/rouletteItem";
 
 type Item = {
   id: number;
@@ -17,7 +18,7 @@ const ORIGINAL_ITEMS: Item[] = Array.from({ length: 10 }).map((_, i) => ({
 }));
 
 // фиксированное значение ширины айтема + его мерджины(х2)
-const ITEM_WIDTH = 110
+const ITEM_WIDTH = 216
 
 // функция перемешивает айтемы
 function shuffle<T>(arr: T[]): T[] {
@@ -100,10 +101,9 @@ const Roulette: FC = () =>{
             </div>
                 <div className="roulette_container" ref={containerRef}>
                     <div className="roulette_strip" style={{transform: `translateX(-${position % (items.length * ITEM_WIDTH)}px)`,}}>
-                        {items.concat(items).map((item, idx) => (
-                        <div className="roulette_strip_item" key={idx}>
-                            <img src={item.image} alt={item.name} />
-                            <span>{item.name}</span>
+                        {items.concat(items).map((item: any, index: number) => (
+                        <div className="roulette_strip_item" key={index}>
+                            <RouletteItem />
                         </div>
                     ))}
                 </div>

@@ -3,11 +3,12 @@ main{
     height: 100vh;
 
     > .main_container{
-        max-width: 1440px;
-        margin: 0 auto;
-        padding: 24px 16px;
+        padding: 24px 0 0 0;
         
         > .main_description{
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 16px;
 
             > .main_description_first{
                 font-weight: 600;
@@ -19,6 +20,10 @@ main{
                 font-weight: 400;
                 font-size: 16px;
             }
+        }
+
+        > .itemList{
+            
         }
     }
 }

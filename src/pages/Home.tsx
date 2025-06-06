@@ -30,9 +30,14 @@ function Home() {
         <div className="main_description">
           <div className="main_description_first">Zakręć kołem i wygraj sushi!</div>
           <div className="main_description_second">Wpisz swój kod promocyjny, zakręć ruletką i zgarnij smakowite nagrody od naszej restauracji!</div>
-          <Roulette />
-          <RouletteItem />
-          <Item />
+        </div>
+
+        <Roulette />
+
+        <div className="itemsList">
+          <div className="itemsList_heading">Co możesz zgarnąć na kole fortuny?</div>
+
+          
         </div>
       </div>
     </main>
