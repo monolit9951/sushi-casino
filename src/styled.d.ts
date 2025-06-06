@@ -10,5 +10,9 @@ declare module "styled-components" {
       LEGENDARY: string;
     };
     colors: Record<string, string>;
+<<<<<<< HEAD
+=======
+    breakpoints: Record<string, string>;
+>>>>>>> 032dffcfde9c0a4e3fb35a058e7886b72c13b66b
   }
 }

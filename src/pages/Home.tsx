@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import CaseOpener from "../components/CaseOpener/CaseOpener.tsx";
 import styled from "styled-components";
 import ListItems from "./../components/ListItems.tsx";
@@ -55,6 +56,13 @@ const Main = styled.main`
   justify-content: flex-start;
   align-items: center;
 `;
+=======
+// export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+import Header from "../components/header/header";
+import './home.scss'
+import Roulette from "../components/roulette/roulette";
+import Item from "../components/item/item";
+>>>>>>> 032dffcfde9c0a4e3fb35a058e7886b72c13b66b
 
 export const mockItems = [
   {
@@ -123,4 +131,51 @@ export const mockItems = [
   },
 ];
 
+<<<<<<< HEAD
+=======
+function Home() {
+  // const { items /* isError, isLoading */ } = useItemsSet();
+  // const sortedItems = useMemo(
+  //   () => items?.sort((a, b) => b.probability - a.probability),
+  //   [items],
+  // );
+  // console.log(sortedItems);
+
+  return (
+    <main>
+      {/* <Logo src="/LogoCasiBLACK.svg" alt="Lucky Sushi Logo" />
+      <CaseOpener items={sortedItems || []} />
+      <SushiLink href="https://neptunessushi.com/" target="_blank">
+        Order more sushi
+      </SushiLink>
+      {sortedItems && <ListItems items={sortedItems} />}
+      <InfoButton>
+        <InfoModal />
+      </InfoButton> */}
+      <Header />
+
+      <div className="main_container">
+        <div className="main_description">
+          <div className="main_description_first">Zakręć kołem i wygraj sushi!</div>
+          <div className="main_description_second">Wpisz swój kod promocyjny, zakręć ruletką i zgarnij smakowite nagrody od naszej restauracji!</div>
+        </div>
+
+        <Roulette />
+
+        <div className="itemsList">
+          <div className="itemsList_heading">Co możesz zgarnąć na kole fortuny?</div>
+          <div className="itemsList_list">
+            {mockItems.map((item: any, index: number)=> (
+              <Item key={index}/>
+            ))}
+          </div>
+
+          <a className="linkLikeButton_global_presset" href="https://neptunessushi.com/">Zobacz więcej zestawów</a>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+>>>>>>> 032dffcfde9c0a4e3fb35a058e7886b72c13b66b
 export default Home;

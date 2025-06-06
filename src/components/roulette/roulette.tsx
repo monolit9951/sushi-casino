@@ -1,0 +1,140 @@
+import { FC, useEffect, useRef, useState } from "react";
+import './roulette.scss'
+import indicatorTop from '../../assets/images/rouleteIndicatorTop.svg'
+import indicatorBottom from '../../assets/images/rouleteIndicatorBottom.svg'
+import RouletteItem from "../rouletteItem/rouletteItem";
+
+type Item = {
+  id: number;
+  image: string;
+  name: string;
+};
+
+// ТЕСТОВЫЕ АЙТЕМЫ
+const ORIGINAL_ITEMS: Item[] = Array.from({ length: 10 }).map((_, i) => ({
+  id: i,
+  image: `https://picsum.photos/100/100?random=${i}`,
+  name: `Item ${i + 1}`,
+}));
+
+// фиксированное значение ширины айтема + его мерджины(х2)
+const ITEM_WIDTH = 216
+
+// функция перемешивает айтемы
+function shuffle<T>(arr: T[]): T[] {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+const Roulette: FC = () =>{
+
+    const containerRef = useRef<HTMLDivElement>(null);
+    const targetDistanceRef = useRef(0);
+    const fixedContainerWidth = useRef(0);
+
+    const [items, setItems] = useState<Item[]>(() => shuffle(ORIGINAL_ITEMS));
+    const [position, setPosition] = useState(0);
+    const [spinning, setSpinning] = useState(false);
+
+
+    // ДЛЯ ОТЛАДКИ ПРОМОКОДА
+    // ЕСЛИ ПРОМОКОД ЕСЛИ false, выдаст уведомление ЕСЛИ ЛЮБОЕ ДРУГОЕ (В ТОМ ЧИСЛЕ ПОУСТОЕ - БУДЕТ СПИН)
+    const [promoAccess, setPromoAccess] = useState<boolean>(true)
+    const [promoInput, setPromoInput] = useState<string>('')
+
+    const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) =>{
+        setPromoInput(event.target.value)
+        setPromoAccess(true)
+    }
+
+
+    // функция для прокрутки
+    const startSpinning = () => {
+        if (spinning) return;
+
+        // ТОЛЬКО ДЛЯ ОТЛАДКИ ПРОМОКОДА
+        if(promoInput === 'false'){
+            setPromoAccess(false)
+            return
+        }
+
+        // ТУТ ПИСАТЬ КОД ДЛЯ ПРОМОКОДА
+
+        const newItems = shuffle(ORIGINAL_ITEMS);
+        setItems(newItems);
+        setSpinning(true);
+
+        // Зафиксировать текущую ширину
+        fixedContainerWidth.current = containerRef.current?.offsetWidth ?? 0;
+
+        const rounds = 3 + Math.floor(Math.random() * 3);
+        const itemOffset = Math.floor(Math.random() * newItems.length) * ITEM_WIDTH;
+        const intraItemOffset = Math.random() * ITEM_WIDTH;
+
+        targetDistanceRef.current =
+            rounds * newItems.length * ITEM_WIDTH + itemOffset + intraItemOffset;
+    };
+
+    // обработка
+    useEffect(() => {
+        if (!spinning) return;
+
+        const totalDistance = targetDistanceRef.current;
+        const duration = 3000;
+        const startTime = performance.now();
+
+        const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+        const animate = () => {
+        const now = performance.now();
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeOutCubic(progress);
+        const currentDistance = totalDistance * easedProgress;
+
+        setPosition(currentDistance);
+
+        if (progress < 1) {
+        requestAnimationFrame(animate);
+        } else {
+        setSpinning(false);
+
+        // используем зафиксированную ширину
+        const center = currentDistance + fixedContainerWidth.current / 2;
+        const index = Math.floor(center / ITEM_WIDTH) % items.length;
+
+        console.log("Выпало:", items[index]);
+        }
+    };
+
+        requestAnimationFrame(animate);
+    }, [spinning]);
+
+
+    return(
+    <div className="roulette">
+        <div className="roulette_inner">
+            <div className="roulete_indicator">
+                <img src={indicatorTop} alt="indicatorUp" />
+                <img src={indicatorBottom} alt="indicatorDown" />
+            </div>
+                <div className="roulette_container" ref={containerRef}>
+                    <div className="roulette_strip" style={{transform: `translateX(-${position % (items.length * ITEM_WIDTH)}px)`,}}>
+                        {items.concat(items).map((item: any, index: number) => (
+                        <div className="roulette_strip_item" key={index}>
+                            <RouletteItem />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        <div className="roulete_control">
+            <div className="roulete_control_noPromo">{promoAccess? '\u00A0' : 'Kod promocyjny nie znaleziony'}</div>
+            <input type="text" className={promoAccess? "roulete_promocodeInput" : "roulete_promocodeInput noPromo"} placeholder="Enter a Promo Code" onChange={(event) => handlePromoInput(event)}/>
+            <button className="button_global_presset" onClick={startSpinning} disabled={spinning}>Spin a Wheel</button>
+        </div>
+    </div>
+    )
+}
+
+export default Roulette
