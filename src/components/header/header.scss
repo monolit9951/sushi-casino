@@ -1,0 +1,34 @@
+@import '../../assets/styles/globals.scss';
+
+header{
+    background-color: $color-black;
+    height: 60px;
+    display: flex;
+
+    > .header_container{
+        flex: 1;
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        > .header_link{
+            display: flex;
+            align-items: center;
+            height: 36px;
+            padding: 8px 10px;
+            box-sizing: border-box;
+            border: 1px solid #EEBE4E;
+            border-radius: 20px;
+            text-decoration: none;
+
+            > .header_link_text{
+                font-family: "Poppins";
+                font-weight: 600;
+                color: #EEBE4E;
+            }
+        }
+    }
+}
