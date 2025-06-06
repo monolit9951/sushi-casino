@@ -108,7 +108,7 @@ function Home() {
             ))}
           </div>
 
-          <a className="linkLikeButton_global_presset" href="#">Zobacz więcej zestawów</a>
+          <a className="linkLikeButton_global_presset" href="https://neptunessushi.com/">Zobacz więcej zestawów</a>
         </div>
       </div>
     </main>

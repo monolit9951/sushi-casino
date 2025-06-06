@@ -6,7 +6,7 @@ const Header: FC = () => {
         <header>
             <div className="header_container">
                 <img src={mainLogo} alt="Logo" />
-                <a className="header_link" href="#">
+                <a className="header_link" href="https://neptunessushi.com/">
                     <span className="header_link_text">Our website</span>
                 </a>
             </div>
