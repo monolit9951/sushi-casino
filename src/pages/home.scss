@@ -1,3 +1,5 @@
+@import '../assets/styles/globals.scss';
+
 main{
     background: url('../assets/images/background.svg');
 
@@ -36,6 +38,15 @@ main{
                 display: grid;
                 gap: 8px;
                 grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            }
+
+            > .linkLikeButton_global_presset{
+                margin: 0 auto;
+                margin-top: 16px;
+                background-color: transparent;
+                color: $color-yellow-main;
+                border: $color-yellow-main 1px solid;
+                box-sizing: border-box;
             }
         }
     }

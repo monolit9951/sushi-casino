@@ -107,6 +107,8 @@ function Home() {
               <Item key={index}/>
             ))}
           </div>
+
+          <a className="linkLikeButton_global_presset" href="#">Zobacz więcej zestawów</a>
         </div>
       </div>
     </main>
