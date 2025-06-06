@@ -1,5 +1,7 @@
 export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
 import Header from "../components/header/header";
+import './home.scss'
+
 function Home() {
   // const { items /* isError, isLoading */ } = useItemsSet();
   // const sortedItems = useMemo(
@@ -20,6 +22,13 @@ function Home() {
         <InfoModal />
       </InfoButton> */}
       <Header />
+
+      <div className="main_container">
+        <div className="main_description">
+          <div className="main_description_first">Zakręć kołem i wygraj sushi!</div>
+          <div className="main_description_second">Wpisz swój kod promocyjny, zakręć ruletką i zgarnij smakowite nagrody od naszej restauracji!</div>
+        </div>
+      </div>
     </main>
   );
 }
