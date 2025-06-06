@@ -26,7 +26,7 @@ main{
 
         > .itemsList{
             max-width: 1440px;
-            margin: 64px auto;
+            margin: 64px auto 0 auto;
             padding: 0 16px;
 
             > .itemsList_heading{
@@ -42,8 +42,7 @@ main{
             }
 
             > .linkLikeButton_global_presset{
-                margin: 0 auto;
-                margin-top: 16px;
+                margin: 16px auto;
                 background-color: transparent;
                 color: $color-yellow-main;
                 border: $color-yellow-main 1px solid;
