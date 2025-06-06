@@ -22,8 +22,22 @@ main{
             }
         }
 
-        > .itemList{
-            
+        > .itemsList{
+            max-width: 1440px;
+            margin: 64px auto;
+            padding: 0 16px;
+
+            > .itemsList_heading{
+                font-size: 24px;
+                font-weight: 600;
+            }
+
+            > .itemsList_list{
+                margin-top: 16px;
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
         }
     }
 }
