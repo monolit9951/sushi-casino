@@ -1,5 +1,6 @@
 import "./prize.scss"
 import sushiSample from '../../assets/images/sushiSample.png'
+import { Link } from "react-router-dom"
 
 function PrizePage(){
     return(
@@ -31,6 +32,7 @@ function PrizePage(){
                             occaecat cupidatat non proident, sunt in culpa qui officia 
                             deserunt mollit anim id est laborum.
                         </div>
+                        <Link to={'/product'} className="linkLikeSkeletonButton_global_presset">View sushi</Link>
                     </div>
                 </div>
             </div>

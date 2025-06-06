@@ -73,8 +73,45 @@
                     font-weight: 400;
                     margin-top: 8px;
                 }
+
+                > .linkLikeSkeletonButton_global_presset{
+                    margin: 8px auto;
+                }
             }
 
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .prizePage {
+        > .prizePage_container {
+            padding: 16px;
+            display: block;
+            
+            > .prizePage_card {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+
+                > .prizePage_card_image {
+                    width: 100%;
+                    height: auto;
+
+                    > img {
+                        width: 100%;
+                        height: auto;
+                        aspect-ratio: 1 / 1;
+                        object-fit: cover;
+                        border-radius: 16px 16px 0 0;
+                    }
+                }
+
+                > .prizePage_card_description {
+                    overflow-y: visible;
+                    margin-top: 16px;
+                }
+            }
         }
     }
 }
