@@ -1,7 +1,5 @@
 main{
     background: url('../assets/images/background.svg');
-    height: 100vh;
-
     > .main_container{
         padding: 24px 0 0 0;
         
@@ -34,9 +32,9 @@ main{
 
             > .itemsList_list{
                 margin-top: 16px;
-                display: flex;
+                display: grid;
                 gap: 8px;
-                flex-wrap: wrap;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
             }
         }
     }
