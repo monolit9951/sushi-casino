@@ -3,6 +3,7 @@ import Header from "../components/header/header";
 import './home.scss'
 import Roulette from "../components/roulette/roulette";
 import RouletteItem from "../components/rouletteItem/rouletteItem";
+import Item from "../components/item/item";
 
 function Home() {
   // const { items /* isError, isLoading */ } = useItemsSet();
@@ -31,6 +32,7 @@ function Home() {
           <div className="main_description_second">Wpisz swój kod promocyjny, zakręć ruletką i zgarnij smakowite nagrody od naszej restauracji!</div>
           <Roulette />
           <RouletteItem />
+          <Item />
         </div>
       </div>
     </main>
