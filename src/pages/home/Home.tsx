@@ -72,25 +72,9 @@ export const mockItems = [
 ];
 
 function Home() {
-  // const { items /* isError, isLoading */ } = useItemsSet();
-  // const sortedItems = useMemo(
-  //   () => items?.sort((a, b) => b.probability - a.probability),
-  //   [items],
-  // );
-  // console.log(sortedItems);
 
   return (
     <main>
-      {/* <Logo src="/LogoCasiBLACK.svg" alt="Lucky Sushi Logo" />
-      <CaseOpener items={sortedItems || []} />
-      <SushiLink href="https://neptunessushi.com/" target="_blank">
-        Order more sushi
-      </SushiLink>
-      {sortedItems && <ListItems items={sortedItems} />}
-      <InfoButton>
-        <InfoModal />
-      </InfoButton> */}
-      <Header />
 
       <div className="main_container">
         <div className="main_description">

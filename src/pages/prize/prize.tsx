@@ -1,9 +1,9 @@
-import { FC } from "react"
+import Header from "../../components/header/header"
+import "./prize.scss"
 
-const PrizePage: FC = () =>{
+function PrizePage(){
     return(
         <div className="prizePage">
-            prize
         </div>
     )
 }

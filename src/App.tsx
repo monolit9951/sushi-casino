@@ -1,19 +1,21 @@
 import Home from "./pages/home/Home.tsx";
 import "./index.scss";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "styled-components";
-import { theme } from "./theme/themes.ts";
+import { Route, Routes } from "react-router-dom";
+import PrizePage from "./pages/prize/prize.tsx";
+import Header from "./components/header/header.tsx";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        {/*<Header />*/}
-        <Home />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <>
+      <Header />
+      <Routes>
+          <Route path="/" Component={Home}/>
+          <Route path="/prize" Component={PrizePage}/>
+      </Routes>
+    </>
   );
 }
 
