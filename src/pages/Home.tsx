@@ -1,68 +1,8 @@
-<<<<<<< HEAD
-import CaseOpener from "../components/CaseOpener/CaseOpener.tsx";
-import styled from "styled-components";
-import ListItems from "./../components/ListItems.tsx";
-import { useItemsSet } from "../api";
-import LinkButton from "../components/BaseComponents/LinkButton.tsx";
-import InfoModal from "../components/BaseComponents/InfoModal.tsx";
-import { useMemo } from "react";
-
 export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
-
-function Home() {
-  const { items /* isError, isLoading */ } = useItemsSet();
-  const sortedItems = useMemo(
-    () => items?.sort((a, b) => b.probability - a.probability),
-    [items],
-  );
-  console.log(sortedItems);
-  return (
-    <Main>
-      <Logo src="/LogoCasiBLACK.svg" alt="Lucky Sushi Logo" />
-      <CaseOpener items={sortedItems || []} />
-      <SushiLink href="https://neptunessushi.com/" target="_blank">
-        Order more sushi
-      </SushiLink>
-      {sortedItems && <ListItems items={sortedItems} />}
-      <InfoButton>
-        <InfoModal />
-      </InfoButton>
-    </Main>
-  );
-}
-
-const InfoButton = styled.div`
-  position: fixed;
-  top: 10px;
-  right: 10px;
-`;
-
-const Logo = styled.img`
-  width: 350px;
-  height: 350px;
-  object-fit: contain;
-`;
-
-const SushiLink = styled(LinkButton)`
-  display: flex;
-  justify-content: center;
-  width: 200px;
-`;
-
-const Main = styled.main`
-  display: flex;
-  width: 100vw;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`;
-=======
-// export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
 import Header from "../components/header/header";
 import './home.scss'
 import Roulette from "../components/roulette/roulette";
 import Item from "../components/item/item";
->>>>>>> 032dffcfde9c0a4e3fb35a058e7886b72c13b66b
 
 export const mockItems = [
   {
@@ -131,8 +71,6 @@ export const mockItems = [
   },
 ];
 
-<<<<<<< HEAD
-=======
 function Home() {
   // const { items /* isError, isLoading */ } = useItemsSet();
   // const sortedItems = useMemo(
@@ -177,5 +115,4 @@ function Home() {
   );
 }
 
->>>>>>> 032dffcfde9c0a4e3fb35a058e7886b72c13b66b
 export default Home;

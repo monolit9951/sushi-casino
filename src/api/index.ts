@@ -35,11 +35,8 @@ export const getItemsSet = async (): Promise<ItemsInterface[]> => {
 export const getWinner = async (code: string): Promise<ItemsInterface> => {
   return new Promise((resolve, reject) => {
     apiClient
-<<<<<<< HEAD
-      .get(`/api/casino/random?wincode=${code}`)
-=======
       .get(`/casino/random?wincode=${code}`)
->>>>>>> 032dffcfde9c0a4e3fb35a058e7886b72c13b66b
+
       .then((response) => {
         resolve(response.data);
       })
