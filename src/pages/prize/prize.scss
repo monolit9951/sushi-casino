@@ -1,4 +1,80 @@
+@import '../../assets/styles/globals.scss';
+
 .prizePage{
-    background: url('../../assets/images/background.svg');
-    height: 100vh;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    > .prizePage_container{
+        flex: 1;
+        height: 100%;
+        background: url('../../assets/images/background.svg');
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+
+        > .prizePage_card{
+            height: 500px;
+            max-width: 1000px;
+            width: 100%;
+            background-color: $color-black;
+            color: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-sizing: border-box;
+            display: flex;
+            gap: 10px;
+
+            > .prizePage_card_image{
+                flex: 1;
+                height: 100%;
+
+                > img{
+                    height: 100%;
+                    aspect-ratio: 1/1;
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            > .prizePage_card_description{
+                overflow-y: auto;
+                overflow-x: hidden;
+                flex: 1;
+
+                > .prizePage_card_heading{
+                    font-size: 24px;
+                    font-weight: 600;
+                }
+
+                > .prizePage_card_price{
+                    margin-top: 8px;
+                    font-weight: 600;
+                    font-size: 24px;
+                    color: $color-yellow-main;
+                    span{
+                        color: white;
+                        font-weight: 400;
+                    }
+                }
+
+                > .prizePage_card_additional{
+                    margin-top: 8px;
+                    font-size: 24px;
+                    font-weight: 600;
+                    color: $color-yellow-main;
+                    > span{
+                        font-weight: 400;
+                        color: white;
+                    }
+                }
+
+                > .prizePage_card_description{
+                    font-weight: 400;
+                    margin-top: 8px;
+                }
+            }
+
+        }
+    }
 }

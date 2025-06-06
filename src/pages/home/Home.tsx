@@ -1,9 +1,7 @@
 export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
-import Header from "../../components/header/header";
-import './home.scss'
 import Roulette from "../../components/roulette/roulette";
 import Item from "../../components/item/item";
-
+import './home.scss'
 export const mockItems = [
   {
     id: 8,
@@ -72,7 +70,6 @@ export const mockItems = [
 ];
 
 function Home() {
-
   return (
     <main>
 

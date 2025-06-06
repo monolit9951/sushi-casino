@@ -9,13 +9,14 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <>
+    <div className="App">
       <Header />
+
       <Routes>
           <Route path="/" Component={Home}/>
           <Route path="/prize" Component={PrizePage}/>
       </Routes>
-    </>
+    </div>
   );
 }
 
