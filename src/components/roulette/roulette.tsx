@@ -3,6 +3,7 @@ import './roulette.scss'
 import indicatorTop from '../../assets/images/rouleteIndicatorTop.svg'
 import indicatorBottom from '../../assets/images/rouleteIndicatorBottom.svg'
 import RouletteItem from "../rouletteItem/rouletteItem";
+import ModalPrize from "../modalPrize/modalPrize";
 
 type Item = {
   id: number;
@@ -26,15 +27,21 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 const Roulette: FC = () =>{
-
+    // ссылки на элементы рулетки
     const containerRef = useRef<HTMLDivElement>(null);
     const targetDistanceRef = useRef(0);
     const fixedContainerWidth = useRef(0);
 
+    // список всех элементов рулетки, позиция остановки, статус вращения
     const [items, setItems] = useState<Item[]>(() => shuffle(ORIGINAL_ITEMS));
     const [position, setPosition] = useState(0);
     const [spinning, setSpinning] = useState(false);
 
+    // для отображения модалки приза
+    const [modalPrizeShow, setModalPrizeShow] = useState<boolean>(false)
+
+    // для пропсов суши (тут просто имя для отображения)
+    const [sushiPropName, setSushiPropName] = useState<string>('')
 
     // ДЛЯ ОТЛАДКИ ПРОМОКОДА
     // ЕСЛИ ПРОМОКОД ЕСЛИ false, выдаст уведомление ЕСЛИ ЛЮБОЕ ДРУГОЕ (В ТОМ ЧИСЛЕ ПОУСТОЕ - БУДЕТ СПИН)
@@ -102,13 +109,20 @@ const Roulette: FC = () =>{
         const center = currentDistance + fixedContainerWidth.current / 2;
         const index = Math.floor(center / ITEM_WIDTH) % items.length;
 
-        console.log("Выпало:", items[index]);
+        // console.log("Выпало:", items[index]);
+        setSushiPropName(items[index].name)
+        setModalPrizeShow(true)
         }
     };
 
         requestAnimationFrame(animate);
     }, [spinning]);
 
+
+    // для размонтировки модального окна приза
+    const handleCloseModalCallback = () =>{
+        setModalPrizeShow(false)
+    }
 
     return(
     <div className="roulette">
@@ -133,6 +147,8 @@ const Roulette: FC = () =>{
             <input type="text" className={promoAccess? "roulete_promocodeInput" : "roulete_promocodeInput noPromo"} placeholder="Enter a Promo Code" onChange={(event) => handlePromoInput(event)}/>
             <button className="button_global_presset" onClick={startSpinning} disabled={spinning}>Spin a Wheel</button>
         </div>
+
+        {modalPrizeShow && <ModalPrize handleCloseModalCallback={handleCloseModalCallback} name={sushiPropName}/>}
     </div>
     )
 }

@@ -2,6 +2,7 @@ export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
 import Roulette from "../../components/roulette/roulette";
 import Item from "../../components/item/item";
 import './home.scss'
+import ModalPrize from "../../components/modalPrize/modalPrize";
 export const mockItems = [
   {
     id: 8,
