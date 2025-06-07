@@ -2,7 +2,7 @@ export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
 import Roulette from "../../components/roulette/roulette";
 import Item from "../../components/item/item";
 import './home.scss'
-import ModalPrize from "../../components/modalPrize/modalPrize";
+// import ModalPrize from "../../components/modalPrize/modalPrize";
 export const mockItems = [
   {
     id: 8,
@@ -85,7 +85,7 @@ function Home() {
         <div className="itemsList">
           <div className="itemsList_heading">Co możesz zgarnąć na kole fortuny?</div>
           <div className="itemsList_list">
-            {mockItems.map((item: any, index: number)=> (
+            {mockItems.map((_, index: number)=> (
               <Item key={index}/>
             ))}
           </div>

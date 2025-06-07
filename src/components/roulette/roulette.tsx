@@ -133,7 +133,7 @@ const Roulette: FC = () =>{
             </div>
                 <div className="roulette_container" ref={containerRef}>
                     <div className="roulette_strip" style={{transform: `translateX(-${position % (items.length * ITEM_WIDTH)}px)`,}}>
-                        {items.concat(items).map((item: any, index: number) => (
+                        {items.concat(items).map((_, index: number) => (
                         <div className="roulette_strip_item" key={index}>
                             <RouletteItem />
                         </div>
