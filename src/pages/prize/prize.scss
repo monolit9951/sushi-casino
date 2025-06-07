@@ -1,4 +1,4 @@
-@import '../../assets/styles/globals.scss';
+@use '../../assets/styles/globals.scss' as globals;
 
 .prizePage{
     display: flex;
@@ -17,7 +17,7 @@
             height: 500px;
             max-width: 1000px;
             width: 100%;
-            background-color: $color-black;
+            background-color: globals.$color-black;
             color: white;
             border-radius: 16px;
             padding: 16px;
@@ -51,7 +51,7 @@
                     margin-top: 8px;
                     font-weight: 600;
                     font-size: 24px;
-                    color: $color-yellow-main;
+                    color: globals.$color-yellow-main;
                     span{
                         color: white;
                         font-weight: 400;
@@ -62,7 +62,7 @@
                     margin-top: 8px;
                     font-size: 24px;
                     font-weight: 600;
-                    color: $color-yellow-main;
+                    color: globals.$color-yellow-main;
                     > span{
                         font-weight: 400;
                         color: white;

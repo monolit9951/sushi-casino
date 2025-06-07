@@ -1,10 +1,10 @@
-@import '../../assets/styles/globals.scss';
+@use '../../assets/styles/globals.scss' as globals;
 
 .item {
   width: 100%;
   aspect-ratio: 1 / 1;
   box-sizing: border-box;
-  border: 1px solid $color-light-grey;
+  border: 1px solid globals.$color-light-grey;
   border-radius: 16px;
   overflow: hidden; // чтобы не торчал img за рамку
   display: flex;

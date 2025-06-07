@@ -1,4 +1,4 @@
-@import '../../assets/styles/globals.scss';
+@use '../../assets/styles/globals.scss' as globals;
 
 main{
     background: url('../../assets/images/blackBack.svg');
@@ -19,7 +19,7 @@ main{
                 margin-top: 16px;
                 font-weight: 400;
                 font-size: 16px;
-                color: $color-white-opacity;
+                color: globals.$color-white-opacity;
             }
         }
 
@@ -43,8 +43,8 @@ main{
             > .linkLikeButton_global_presset{
                 margin: 16px auto;
                 background-color: transparent;
-                color: $color-yellow-main;
-                border: $color-yellow-main 1px solid;
+                color: globals.$color-yellow-main;
+                border: globals.$color-yellow-main 1px solid;
                 box-sizing: border-box;
             }
         }

@@ -1,7 +1,7 @@
-@import '../../assets/styles/globals.scss';
+@use '../../assets/styles/globals.scss' as globals;
 
 header{
-    background-color: $color-black;
+    background-color: globals.$color-black;
     height: 60px;
     display: flex;
 

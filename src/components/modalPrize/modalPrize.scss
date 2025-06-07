@@ -1,4 +1,4 @@
-@import '../../assets/styles/globals.scss';
+@use '../../assets/styles/globals.scss' as globals;
 
 .modalPrize{
 
@@ -9,7 +9,7 @@
         transform: translate(-50%, -50%);
         z-index: 1001;
         width: 350px;
-        background-color: $color-grey;
+        background-color: globals.$color-grey;
         border-radius: 24px;
         padding: 16px;
         box-sizing: border-box;
@@ -25,7 +25,7 @@
         > img{
             width: 100%;
             border-radius: 16px;
-            border: 1px solid $color-light-grey;
+            border: 1px solid globals.$color-light-grey;
             box-sizing: border-box;
         }
 

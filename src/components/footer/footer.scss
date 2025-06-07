@@ -1,7 +1,7 @@
-@import '../../assets/styles/globals.scss';
+@use '../../assets/styles/globals.scss' as globals;
 
 footer{
-    background-color: $color-grey;
+    background-color: globals.$color-grey;
     height: 32px;
     display: flex;
     align-items: center;
@@ -18,7 +18,7 @@ footer{
             font-weight: 400;
             line-height: 16px;
             letter-spacing: 0%;
-            color: $color-extraLight-grey;
+            color: globals.$color-extraLight-grey;
         }
     }
 }

@@ -1,4 +1,4 @@
-@import '../../assets/styles/globals.scss';
+@use '../../assets/styles/globals.scss' as globals;
 
 .roulette {
     margin: 50px auto;
@@ -8,7 +8,7 @@
     > .roulette_inner{
         position: relative;
         height: 216px;
-        background-color: $color-grey;
+        background-color: globals.$color-grey;
         display: flex;
 
         > .roulette_container {
@@ -66,7 +66,7 @@
         align-items: center;
 
         > .roulete_control_noPromo{
-            color: $color-red;
+            color: globals.$color-red;
             font-size: 12px;
             font-weight: 400;
         }
@@ -76,8 +76,8 @@
             margin-top: 4;
             width: 100%;
             height: 48px;
-            background-color: $color-grey;
-            border: 1px solid $color-light-grey;
+            background-color: globals.$color-grey;
+            border: 1px solid globals.$color-light-grey;
             outline: none;
             border-radius: 99px;
             padding: 0 16px;
@@ -91,11 +91,11 @@
                 font-size: 16px;
                 line-height: 16px;
                 font-weight: 400;
-                color: $color-superLight-grey;
+                color: globals.$color-superLight-grey;
             }
 
             &.noPromo {
-                border: 1px solid $color-red;
+                border: 1px solid globals.$color-red;
             }
         }
 
