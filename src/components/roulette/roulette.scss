@@ -22,6 +22,8 @@
                 > .roulette_strip {
                     display: flex;
                     transition: transform 0s;
+                    will-change: transform;
+                    backface-visibility: hidden;
 
                     > .roulette_strip_item {
                         width: 200px;

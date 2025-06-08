@@ -54,6 +54,12 @@ const Roulette: FC = () =>{
         setPromoAccess(true)
     }
 
+    // ФУНКЦИЯ ПРОКРУТКИ ДЕЙСТВУЕТ СЛЕДУЮЩИМ ОБРАЗОМ. У НАС ЕСТЬ КОЛИЧЕСТВО rounds, ТО ЕСТЬ ПОЛНЫХ ПРОКРУТОВ РУЛЕТКИ
+    // НЕЗАВИСИМО ОТ ИХ КОЛИЧЕСТВА РУЛЕТКА БУДЕТ КРУТИТЬСЯ ОПРЕДЕЛЁННОЕ КОЛИЧЕСТВО ВРЕМЕНИ duration, ОТСЮДА НАХОДИМ
+    // СКОРОСТЬ И ПЛАВНОСТЬ ПРОКРУТКИ. РУЛЕТКА ЗАМЕДЛЯЕТ ХОД К КОНЦУ. КАЖДЫЙ ПРОКРУТ ПРОИСХОДИТ С ПЕРЕМЕШИВАНИЕМ В
+    // НАЧАЛЕ (function shuffle)
+
+
 
     // функция для прокрутки
     const startSpinning = () => {
@@ -74,6 +80,7 @@ const Roulette: FC = () =>{
         // Зафиксировать текущую ширину
         fixedContainerWidth.current = containerRef.current?.offsetWidth ?? 0;
 
+        // количество прокруток
         const rounds = 3 + Math.floor(Math.random() * 3);
         const itemOffset = Math.floor(Math.random() * newItems.length) * ITEM_WIDTH;
         const intraItemOffset = Math.random() * ITEM_WIDTH;
@@ -87,16 +94,16 @@ const Roulette: FC = () =>{
         if (!spinning) return;
 
         const totalDistance = targetDistanceRef.current;
-        const duration = 3000;
+        const duration = 10000;
         const startTime = performance.now();
 
-        const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+        const easeOutQuint = (t: number) => 1 - Math.pow(1 - t, 2);
 
         const animate = () => {
         const now = performance.now();
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        const easedProgress = easeOutCubic(progress);
+        const easedProgress = easeOutQuint(progress);
         const currentDistance = totalDistance * easedProgress;
 
         setPosition(currentDistance);
