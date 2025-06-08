@@ -7,12 +7,15 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    // background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    padding-top: 10px;
     z-index: 1000;
     text-align: left;   //у рулетки необходим текст-алайн центр, который наследовался
+    max-width: 500px;
+    margin: 0 auto;
 
     > .modalSlider_content{
         width: 100%;
@@ -23,6 +26,11 @@
         overflow: hidden;
         animation: slideUp 0.3s ease-out;
         padding: 8px;
+
+
+        &.hide{
+            animation: slideDown 0.3s ease-out;
+        }
 
         > .modalSlider_grabler{
             cursor: grab;
@@ -35,6 +43,25 @@
             max-height: 80vh;
             overflow-y: auto;
             box-sizing: border-box;
+
+            &::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: #999999;
+                border-radius: 2px;
+            }
+
+            & {
+                scrollbar-width: thin;
+                scrollbar-color: #999999 transparent;
+            }
+
 
             > .modalSlider_prizeImg{
                 max-width: 200px;
@@ -127,6 +154,10 @@
             }
         }
     }
+
+    > .modalSlider_background{
+        
+    }
 }
 
 @keyframes slideUp {
@@ -135,5 +166,14 @@
   }
   to {
     transform: translateY(0%);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(100%);
   }
 }

@@ -102,17 +102,17 @@ const Roulette: FC = () =>{
         setPosition(currentDistance);
 
         if (progress < 1) {
-        requestAnimationFrame(animate);
+            requestAnimationFrame(animate);
         } else {
-        setSpinning(false);
+            setSpinning(false);
 
-        // используем зафиксированную ширину
-        const center = currentDistance + fixedContainerWidth.current / 2;
-        const index = Math.floor(center / ITEM_WIDTH) % items.length;
+            // используем зафиксированную ширину
+            const center = currentDistance + fixedContainerWidth.current / 2;
+            const index = Math.floor(center / ITEM_WIDTH) % items.length;
 
-        // console.log("Выпало:", items[index]);
-        setSushiPropName(items[index].name)
-        setModalPrizeShow(true)
+            // console.log("Выпало:", items[index]);
+            // setSushiPropName(items[index].name)
+                setModalPrizeShow(true)
         }
     };
 
@@ -152,7 +152,7 @@ const Roulette: FC = () =>{
         </div>
 
         {/* {modalPrizeShow && <ModalPrize handleCloseModalCallback={handleCloseModalCallback} name={sushiPropName}/>} */}
-        <ModalSlider/>
+        { modalPrizeShow && <ModalSlider handleCloseModalCallback = {handleCloseModalCallback}/>}
     </div>
     )
 }
