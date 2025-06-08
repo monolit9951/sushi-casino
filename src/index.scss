@@ -4,6 +4,10 @@ body {
   font-family: "Poppins", sans-serif;
   font-weight: 600;
   font-style: normal;
+    transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
 }
 
 input{
