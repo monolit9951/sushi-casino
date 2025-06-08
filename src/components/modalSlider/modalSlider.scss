@@ -33,9 +33,13 @@
         }
 
         > .modalSlider_grabler{
-            cursor: grab;
+            // cursor: grab;
             display: block;
             margin: 0 auto;
+            user-select: none;
+            user-drag: none;
+            -webkit-user-drag: none;
+            pointer-events: none;
         }
 
         > .modaSlider_content_container{

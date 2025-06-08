@@ -81,7 +81,7 @@ const Roulette: FC = () =>{
         fixedContainerWidth.current = containerRef.current?.offsetWidth ?? 0;
 
         // количество прокруток
-        const rounds = 3 + Math.floor(Math.random() * 3);
+        const rounds = 7 + Math.floor(Math.random() * 7);
         const itemOffset = Math.floor(Math.random() * newItems.length) * ITEM_WIDTH;
         const intraItemOffset = Math.random() * ITEM_WIDTH;
 
@@ -94,7 +94,7 @@ const Roulette: FC = () =>{
         if (!spinning) return;
 
         const totalDistance = targetDistanceRef.current;
-        const duration = 10000;
+        const duration = 30000;
         const startTime = performance.now();
 
         const easeOutQuint = (t: number) => 1 - Math.pow(1 - t, 2);
