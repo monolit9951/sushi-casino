@@ -12,7 +12,7 @@
     justify-content: center;
     align-items: flex-end;
     padding-top: 10px;
-    z-index: 1000;
+    z-index: 10;
     text-align: left;   //у рулетки необходим текст-алайн центр, который наследовался
     max-width: 500px;
     margin: 0 auto;
@@ -24,12 +24,12 @@
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         overflow: hidden;
-        animation: slideUp 0.3s ease-out;
+        animation: slideUp 0.3s ease-out forwards;
         padding: 8px;
 
 
         &.hide{
-            animation: slideDown 0.3s ease-out;
+            animation: slideDown 0.3s ease-out forwards;
         }
 
         > .modalSlider_grabler{
@@ -156,10 +156,44 @@
     }
 
     > .modalSlider_background{
-        
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        opacity: 0.5;
+        z-index: -1;
+        animation: modalBackShow 0.3s ease-out forwards;
+        pointer-events: auto;
+    
+        &.hide{
+          animation: modalBackHide 0.3s ease-out forwards;
+          pointer-events: none;
+        }
     }
 }
 
+// анимация фона
+@keyframes modalBackShow {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 0.5;
+    }
+}
+
+@keyframes modalBackHide {
+    0%{
+        opacity: 0.5;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+// слайды вверх/вниз
 @keyframes slideUp {
   from {
     transform: translateY(100%);

@@ -121,7 +121,7 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback}) =>{
                 </div>
             </div>
 
-            <div className="modalSlider_background" />
+            <div className={hideAnimation? "modalSlider_background" : "modalSlider_background hide"} onClick={handleUnmountModal}/>
         </div>
     )
 }
