@@ -143,8 +143,10 @@ const Roulette: FC = () =>{
         </div>
 
         <div className="roulete_control">
-            <div className="roulete_control_noPromo">{promoAccess? '\u00A0' : 'Kod promocyjny nie znaleziony'}</div>
-            <input type="text" className={promoAccess? "roulete_promocodeInput" : "roulete_promocodeInput noPromo"} placeholder="Enter a Promo Code" onChange={(event) => handlePromoInput(event)}/>
+            <div className="roulete_control_promoContainer">
+                <div className="roulete_control_noPromo">{promoAccess? '\u00A0' : 'Kod promocyjny nie znaleziony'}</div>
+                <input type="text" className={promoAccess? "roulete_promocodeInput" : "roulete_promocodeInput noPromo"} placeholder="Enter a Promo Code" onChange={(event) => handlePromoInput(event)}/>
+            </div>
             <button className="button_global_presset" onClick={startSpinning} disabled={spinning}>Spin a Wheel</button>
         </div>
 
