@@ -3,7 +3,8 @@ import './roulette.scss'
 import indicatorTop from '../../assets/images/rouleteIndicatorTop.svg'
 import indicatorBottom from '../../assets/images/rouleteIndicatorBottom.svg'
 import RouletteItem from "../rouletteItem/rouletteItem";
-import ModalPrize from "../modalPrize/modalPrize";
+// import ModalPrize from "../modalPrize/modalPrize";
+import ModalSlider from "../modalSlider/modalSlider";
 
 type Item = {
   id: number;
@@ -41,7 +42,7 @@ const Roulette: FC = () =>{
     const [modalPrizeShow, setModalPrizeShow] = useState<boolean>(false)
 
     // для пропсов суши (тут просто имя для отображения)
-    const [sushiPropName, setSushiPropName] = useState<string>('')
+    // const [sushiPropName, setSushiPropName] = useState<string>('')
 
     // ДЛЯ ОТЛАДКИ ПРОМОКОДА
     // ЕСЛИ ПРОМОКОД ЕСЛИ false, выдаст уведомление ЕСЛИ ЛЮБОЕ ДРУГОЕ (В ТОМ ЧИСЛЕ ПОУСТОЕ - БУДЕТ СПИН)
@@ -150,7 +151,8 @@ const Roulette: FC = () =>{
             <button className="button_global_presset" onClick={startSpinning} disabled={spinning}>Spin a Wheel</button>
         </div>
 
-        {modalPrizeShow && <ModalPrize handleCloseModalCallback={handleCloseModalCallback} name={sushiPropName}/>}
+        {/* {modalPrizeShow && <ModalPrize handleCloseModalCallback={handleCloseModalCallback} name={sushiPropName}/>} */}
+        <ModalSlider/>
     </div>
     )
 }

@@ -1,0 +1,126 @@
+@use '../../assets/styles/globals.scss' as globals;
+
+.modalSlider{
+    position: fixed;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 1000;
+    text-align: left;   //у рулетки необходим текст-алайн центр, который наследовался
+
+    > .modalSlider_content{
+        width: 100%;
+        max-height: 100%;
+        background-color: globals.$color-modal-black;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        overflow: hidden;
+        animation: slideUp 0.3s ease-out;
+        padding: 8px;
+
+        > .modalSlider_grabler{
+            cursor: grab;
+            display: block;
+            margin: 0 auto;
+        }
+
+        > .modaSlider_content_container{
+            padding: 16px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+
+            > .modalSlider_prizeImg{
+                max-width: 200px;
+                margin: 0 auto;
+            }
+
+            > .modalSlider_heading{
+                margin-top: 16px;
+                align-self: flex-start;
+                font-size: 24px;
+                line-height: 30px;
+                color: white;
+                font-weight: 600;
+            }
+
+            > .modalSlider_details{
+                margin-top: 16px;
+                border-radius: 16px;
+                padding: 12px;
+                box-sizing: border-box;
+                background-color: globals.$color-modal-lightBlack;
+
+                > .modalSlider_details_heading{
+                    color: white;
+                    font-size: 16px;
+                    list-style: 24px;
+                    letter-spacing: 0%;
+                    font-size: 600;
+                }
+
+                > .modalSlider_details_info{
+                    margin-top: 8px;
+                    color: globals.$color-white-additional;
+                    font-size: 16px;
+                    list-style: 24px;
+                    letter-spacing: 0%;
+                    font-weight: 400;
+                }
+
+                > .modalSlider_details_promocodeCopy{
+                    margin-top: 8px;
+                    background-color: globals.$color-grey;
+                    outline: none;
+                    border: globals.$color-light-grey 1px solid;
+                    padding: 12px 16px;
+                    box-sizing: border-box;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    border-radius: 99px;
+                    cursor: pointer;
+
+                    > .modalSlider_details_promocodeCopy_promocode{
+                        font-size: 16px;
+                        color: white;
+                        line-height: 100%;
+                        letter-spacing: 0%;
+                        font-weight: 400;
+                    }
+                }
+
+                > .modalSlider_details_promocodeExplain{
+                    margin-top: 8px;
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 8px;
+
+                    > .modalSlider_details_promocodeExplain_text{
+                        color: globals.$color-white-special;
+                        font-weight: 400;
+                        font-size: 12px;
+                        line-height: 16px;
+                        letter-spacing: 0%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
