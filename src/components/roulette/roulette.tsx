@@ -107,12 +107,12 @@ const Roulette: FC = () =>{
             setSpinning(false);
 
             // используем зафиксированную ширину
-            const center = currentDistance + fixedContainerWidth.current / 2;
-            const index = Math.floor(center / ITEM_WIDTH) % items.length;
+            // const center = currentDistance + fixedContainerWidth.current / 2;
+            // const index = Math.floor(center / ITEM_WIDTH) % items.length;
 
             // console.log("Выпало:", items[index]);
             // setSushiPropName(items[index].name)
-                setModalPrizeShow(true)
+            setModalPrizeShow(true)
         }
     };
 
@@ -151,8 +151,7 @@ const Roulette: FC = () =>{
             <button className="button_global_presset" onClick={startSpinning} disabled={spinning}>Spin a Wheel</button>
         </div>
 
-        {/* {modalPrizeShow && <ModalPrize handleCloseModalCallback={handleCloseModalCallback} name={sushiPropName}/>} */}
-        { modalPrizeShow && <ModalSlider handleCloseModalCallback = {handleCloseModalCallback}/>}
+        {modalPrizeShow && <ModalSlider handleCloseModalCallback = {handleCloseModalCallback}/>}
     </div>
     )
 }

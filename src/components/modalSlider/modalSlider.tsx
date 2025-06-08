@@ -116,7 +116,7 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback}) =>{
                         </div>
                     </div>
                     <div className="modalSlide_closeButton">
-                        <button className="button_global_presset">Countinue</button>
+                        <button className="button_global_presset" onClick={handleUnmountModal}>Countinue</button>
                     </div>
                 </div>
             </div>
