@@ -116,7 +116,7 @@ const Roulette: FC = () =>{
     };
 
         requestAnimationFrame(animate);
-    }, [spinning]);
+    }, [spinning, items]);
 
 
     // для размонтировки модального окна приза

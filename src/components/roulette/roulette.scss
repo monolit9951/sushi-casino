@@ -18,9 +18,11 @@
                 box-sizing: border-box;
                 display: flex;
                 align-items: center;
+
                 > .roulette_strip {
                     display: flex;
                     transition: transform 0s;
+
                     > .roulette_strip_item {
                         width: 200px;
                         margin: 0 8px;
@@ -80,11 +82,10 @@
             border: 1px solid globals.$color-light-grey;
             outline: none;
             border-radius: 99px;
-            padding: 0 16px;
+            padding: 12px 16px;
             box-sizing: border-box;
             font-family: "Poppins";
             font-size: 16px;
-            text-align: center;
             
             &::placeholder{
                 font-family: "Poppins";
