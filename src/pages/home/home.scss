@@ -1,8 +1,10 @@
 @use '../../assets/styles/globals.scss' as globals;
 
 main{
-    background-image: url('../../assets/images/blackBack.svg');
+    // background-image: url('../../assets/images/blackBack.svg');
     overscroll-behavior: none;
+
+    background-color: black;
     // background-repeat: no-repeat;
     //  background-size: cover;
 
