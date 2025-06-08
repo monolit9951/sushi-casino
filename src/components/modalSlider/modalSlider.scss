@@ -31,7 +31,7 @@
         }
 
         > .modaSlider_content_container{
-            padding: 16px;
+            padding: 16px 16px 0 16px;
             max-height: 80vh;
             overflow-y: auto;
             box-sizing: border-box;
@@ -110,6 +110,19 @@
                         line-height: 16px;
                         letter-spacing: 0%;
                     }
+                }
+            }
+
+            > .modalSlide_closeButton{
+                position: sticky;
+                bottom: 0;
+                background-color: globals.$color-modal-black;
+                padding: 16px 0;
+                display: flex;
+
+                > .button_global_presset{
+                    flex: 1;
+                    max-width: none;
                 }
             }
         }

@@ -46,7 +46,9 @@ const ModalSlider: FC = () =>{
                             </div>
                         </div>
                     </div>
-
+                    <div className="modalSlide_closeButton">
+                        <button className="button_global_presset">Countinue</button>
+                    </div>
                 </div>
             </div>
         </div>
