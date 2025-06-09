@@ -1,0 +1,67 @@
+import { Button, chakra } from '@chakra-ui/react'
+
+export const CountButton = chakra(Button, {
+  baseStyle: {
+    bg: 'turquoise.77',
+    borderLeftRadius: 20,
+    h: "20px",
+    width: 10,
+    _hover: {
+      backgroundColor: '#003E66',
+      color: 'white',
+    },
+    px: 0,
+    variants: {
+      card: {
+        color: 'white',
+        _hover: {
+          color: 'white',
+        },
+      },
+      basket: {
+        color: 'black',
+        _hover: {
+          color: 'white',
+        },
+      },
+    },
+  },
+})
+
+export const CountButtonBasketDec = chakra(Button, {
+  baseStyle: {
+    bg: '#FFFFFF',
+    pl: '0px',
+    pr: '4px',
+    pt: '6px',
+    pb: '6px',
+    fontSize: '12px',
+    fontWeight: '400',
+    fontFamily: 'Rubik',
+    lineHeight: '12px',
+    color: 'black',
+    _hover: {
+      color: 'white',
+    },
+    fontStyle: 'normal',
+  },
+})
+
+export const CountButtonBasketInc = chakra(Button, {
+  baseStyle: {
+    bg: '#FFFFFF',
+    pr: '0px',
+    pl: '0px',
+    pt: '6px',
+    pb: '6px',
+    fontSize: '12px',
+    fontWeight: '400',
+    fontFamily: 'Rubik',
+    lineHeight: '12px',
+    color: 'black',
+    _hover: {
+      color: 'white',
+    },
+    fontStyle: 'normal',
+  },
+})

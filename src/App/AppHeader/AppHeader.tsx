@@ -1,0 +1,109 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { Flex, useBreakpointValue, chakra, Container } from '@chakra-ui/react'
+import { NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import Logo from 'components/Logo'
+import Place from './Place'
+import Burger from './Burger'
+import LanguageSelect from './LanguageSelect'
+import { EXTERNAL_LINKS, NAV_LINKS } from '../../constants'
+import NavBar, { ExternalLink } from './NavBar'
+
+const MainNavLink = chakra(NavLink, {
+  baseStyle: {
+    fontSize: 16,
+    transition: 'all 0.2s',
+    fontWeight: 400,
+    letterSpacing: '.35px',
+    color: '#343330',
+    fontFamily: 'Rubik',
+    p: '6px',
+    _hover: {
+      color: 'gray.300',
+    },
+    _activeLink: {
+      color: 'gray.600',
+    },
+  },
+})
+
+const AppHeader = () => {
+  const { t } = useTranslation()
+  const [isOpen, setIsOpen] = useState(false)
+  const isLargerScreen = useBreakpointValue({ base: false, lg: true })
+  const burgerRef = useRef<HTMLDivElement | null>(null)
+
+  const stickyStyle = {
+    top: 0,
+    zIndex: 1000,
+    backgroundColor: 'white',
+    borderBottom: '1px solid #b8b9ba',
+  }
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (burgerRef.current && !burgerRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen])
+
+  return (
+    <Container pos="fixed" as="header" maxWidth="100%" style={stickyStyle} ref={burgerRef}>
+      <Flex
+        align="center"
+        justifyContent="space-between"
+        w="100%"
+        h="64px"
+        px={{ base: 0, lg: '75px' }}
+        py={{ base: 0, lg: '8px' }}
+      >
+        <Logo />
+        {isLargerScreen ? (
+          <>
+            <NavBar />
+            <Flex alignItems="center" gap="24px">
+              <Place isLargerScreen={isLargerScreen}/>
+              <LanguageSelect />
+            </Flex>
+          </>
+        ) : (
+          <>
+            <ExternalLink href={EXTERNAL_LINKS[0]} isExternal>
+              {t(`navbar.l0`)}
+            </ExternalLink>
+            <Burger isOpen={isOpen} setIsOpen={setIsOpen}/>
+          </>
+        )}
+      </Flex>
+      {!isLargerScreen && isOpen && (
+        <Flex flexDir="column" alignItems={'flex-end'}>
+          {NAV_LINKS.map((route, idx) => (
+            <MainNavLink to={route} key={`navbar.${idx}`}>
+              {t(`navbar.${idx}`)}
+            </MainNavLink>
+          ))}
+          <ExternalLink href={EXTERNAL_LINKS[1]} isExternal>
+            {t(`navbar.l1`)}
+          </ExternalLink>
+          <Place isLargerScreen={isLargerScreen}/>
+
+          {/*<Flex pb={2}>*/}
+          {/*  <LanguageSelect text={'Select Language'} />*/}
+          {/*</Flex>*/}
+          {/*<Text>{LanguageSelect.name}</Text>*/}
+        </Flex>
+      )}
+
+    </Container>
+  )
+}
+
+export default AppHeader

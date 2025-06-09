@@ -1,0 +1,91 @@
+import React, { useState } from 'react'
+import {
+  Button,
+  DrawerCloseButton,
+  Flex,
+  Text,
+  useMediaQuery,
+} from '@chakra-ui/react'
+import ProductsList from './ProductsList/ProductsList'
+import InfoToPay from './InfoToPay'
+import { BasketTypes } from 'types'
+import { useSelector } from 'react-redux'
+import { selectBasketProducts } from 'redux/products/selectors'
+import { PromoCode } from './PromoCode'
+import { useVoucher } from '../../hooks/useVoucher'
+
+interface Props {
+  setSelectedBasketType: React.Dispatch<React.SetStateAction<BasketTypes>>
+}
+
+const BasketType = ({ setSelectedBasketType }: Props) => {
+  const products = useSelector(selectBasketProducts)
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+  const [isLessThan768] = useMediaQuery('(max-width: 768px)')
+  const { validateVoucher, voucher } = useVoucher()
+
+  const orderClickHandler = () => {
+    if(!voucher.code) validateVoucher()
+    setSelectedBasketType('delivery')
+  }
+  return (
+    <>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Text
+          fontSize={isLessThan768 ? '14px' : '24px'}
+          fontFamily={'Rubik'}
+          fontStyle={'normal'}
+          fontWeight={'600'}
+          lineHeight={isLessThan768 ? '19px' : '36px'}
+          color="blue.300"
+          pl={'5px'}
+        >
+          Koszyk
+        </Text>
+        <DrawerCloseButton pos="static" />
+      </Flex>
+
+      <Flex flexDir="column">
+        <Text
+          fontSize={isLessThan768 ? 14 : 16}
+          fontWeight={400}
+          color="blue.300"
+          lineHeight={isLessThan768 ? '21px' : '24px'}
+          fontFamily={'Rubik'}
+          fontStyle={'normal'}
+          mb={isLessThan768 ? '18px' : '16px'}
+          pl={'5px'}
+        >
+          Twoje zamówienie:
+        </Text>
+        <ProductsList />
+
+        <PromoCode />
+
+        <InfoToPay
+          deliveryShown={false}
+          setIsButtonDisabled={setIsButtonDisabled}
+        />
+
+        <Button
+          alignSelf="center"
+          bg="blue.100"
+          borderRadius={25}
+          isDisabled={!products.length || isButtonDisabled}
+          onClick={orderClickHandler}
+          color={'#FFFFFF'}
+          fontSize={16}
+          fontWeight={400}
+          lineHeight={'24px'}
+          fontFamily={'Rubik'}
+          fontStyle={'normal'}
+          mt={'9px'}
+        >
+          Zamów
+        </Button>
+      </Flex>
+    </>
+  )
+}
+
+export default BasketType

@@ -1,0 +1,81 @@
+import { useEffect, useMemo, useState } from 'react'
+import { SelectedProduct } from 'types'
+import { calculateDiscountedPrice } from './OrderFuncs'
+import { useSelector } from 'react-redux'
+import {
+  selectBasketProducts,
+  selectIsDelivery,
+  selectVoucher,
+} from '../../redux/products/selectors'
+import { calculateTotalPrice } from '../../utils/calculateDiscountedPrice'
+import { minimalPrice } from '../../constants'
+import { useDeliveryCost } from '../../hooks/useDeliveryCost'
+
+interface Props {
+  isDeliveryIncluded?: boolean
+}
+
+export function useTotalPrice({
+  isDeliveryIncluded = true,
+}: Props) {
+  const voucher = useSelector(selectVoucher)
+  const isDelivery = useSelector(selectIsDelivery)
+  const selectedProducts: SelectedProduct[] = useSelector(selectBasketProducts)
+  const totalPrice = calculateTotalPrice(selectedProducts)
+  const [discountMessage, setDiscountMessage] = useState<number>(0)
+  const deliveryCost = useDeliveryCost()
+
+  const totalPriceWithDiscount = useMemo(() => {
+    return selectedProducts.reduce((acc, item) => {
+      const { price, discount } = item.product
+      const discountedPrice = discount
+        ? calculateDiscountedPrice(
+            price,
+            discount.discountPerQuantity,
+            item.count,
+          )
+        : price
+      return acc + discountedPrice * item.count
+    }, 0)
+  }, [selectedProducts])
+
+  const isDiscounted = totalPrice > totalPriceWithDiscount
+  const deliveryPrice =
+    isDelivery && isDeliveryIncluded && deliveryCost ? deliveryCost : 0
+  const priceWithVoucher =
+    (isDiscounted ? totalPriceWithDiscount : totalPrice) * voucher.discount +
+    +deliveryPrice
+  const isMinimumPriceReached = priceWithVoucher >= minimalPrice
+
+  const isVoucherActive = totalPrice !== 0 && voucher.discount !== 1
+
+  const discount = isVoucherActive
+    ? totalPrice - priceWithVoucher
+    : isDiscounted
+    ? totalPrice - totalPriceWithDiscount
+    : 0
+
+  useEffect(() => {
+    const voucherPercent = (1 - voucher.discount) * 100
+    setDiscountMessage(Math.round(voucherPercent))
+  }, [isVoucherActive])
+
+  return {
+    finalPrice: priceWithVoucher,
+    totalPrice,
+    isMinimumPriceReached,
+    discount,
+    showDiscounted: isVoucherActive || isDiscounted,
+    discountMessage,
+  }
+}
+
+export function useTotalWeight() {
+  const selectedProducts: SelectedProduct[] = useSelector(selectBasketProducts)
+
+  return useMemo(() => {
+    return Object.values(selectedProducts).reduce((acc, item) => {
+      return acc + item.product.weight * item.count
+    }, 0)
+  }, [selectedProducts])
+}

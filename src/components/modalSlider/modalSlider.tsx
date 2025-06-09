@@ -2,9 +2,9 @@ import { FC, useEffect, useState } from "react"
 import './modalSlider.scss'
 
 // сделать блокскролл
-import grabler from '../../assets/images/Grabber.svg'
-import copy from '../../assets/images/copy.svg'
-import alert from '../../assets/images/alert.svg'
+import grabler from '../../assets/img/Grabber.svg'
+import copy from '../../assets/img/copy.svg'
+import alert from '../../assets/img/alert.svg'
 import Item from "../item/item"
 
 interface ModalSlideInterface {

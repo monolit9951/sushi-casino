@@ -1,5 +1,5 @@
 import { FC } from "react";
-import sampleItem from '../../assets/images/sushiSample.png'
+import sampleItem from '../../assets/img/sushiSample.png'
 import './rouletteItem.scss'
 
 const RouletteItem: FC = () => {

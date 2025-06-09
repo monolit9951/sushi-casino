@@ -1,60 +1,109 @@
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { Rarity } from "../pages/home/Home.tsx";
+import axios from 'axios'
+import {
+  Category, FetchedWorkingHours,
+  OrderToPost,
+  Product,
+  ReturnedOrder,
+  ValidatedVoucher,
+} from '../types'
 
-const BASE_URL = import.meta.env.VITE_APP_MAIN_API;
+const BASE_URL = import.meta.env.VITE_APP_MAIN_API
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
   withCredentials: false,
-});
+})
 
-export interface ItemsInterface {
-  description: string;
-  id: number;
-  imageUrl: string;
-  name: string;
-  probability: number;
-  rarity: Rarity;
+const postOrder = async (orderObj: OrderToPost): Promise<ReturnedOrder> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .post('/orders', orderObj)
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
 
-export const getItemsSet = async (): Promise<ItemsInterface[]> => {
+const postVoucher = async (voucher: string): Promise<ValidatedVoucher> => {
   return new Promise((resolve, reject) => {
     apiClient
-
-      .get("api/casino")
+      .post('/vouchers/validate', { voucherKey: voucher })
       .then((response) => {
-        resolve(response.data);
+        resolve(response.data)
       })
       .catch((error) => {
-        reject(error);
-      });
-  });
-};
+        reject(error.response.data)
+      })
+  })
+}
 
-export const getWinner = async (code: string): Promise<ItemsInterface> => {
+const getProducts = async (): Promise<Product[]> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .get(`/casino/random?wincode=${code}`)
-
+      .get('/products')
       .then((response) => {
-        resolve(response.data);
+        resolve(response.data)
       })
       .catch((error) => {
-        reject(error);
-      });
-  });
-};
+        reject(error)
+      })
+  })
+}
 
-export const useItemsSet = () => {
-  const {
-    data: items,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["items"],
-    queryFn: () => getItemsSet(),
-  });
+const getProduct = async (id: string): Promise<Product> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get(`/products/${id}`)
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
 
-  return { items, isLoading, isError };
-};
+const getCategories = async (): Promise<Category[]> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get('/category')
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+const getWorkingHours = async (): Promise<FetchedWorkingHours> => {
+    console.log('BASE_URL:', BASE_URL)
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get('/working-hours')
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+const getDeliveryCost = async (): Promise<{deliveryPrice: number}> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get('/orders/delivery')
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+export { getProducts, getCategories, getProduct, postOrder, postVoucher, getWorkingHours, getDeliveryCost }

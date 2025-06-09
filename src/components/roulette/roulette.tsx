@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 import './roulette.scss'
-import indicatorTop from '../../assets/images/rouleteIndicatorTop.svg'
-import indicatorBottom from '../../assets/images/rouleteIndicatorBottom.svg'
+import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg'
+import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg'
 import RouletteItem from "../rouletteItem/rouletteItem";
 // import ModalPrize from "../modalPrize/modalPrize";
 import ModalSlider from "../modalSlider/modalSlider";

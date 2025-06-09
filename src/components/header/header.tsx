@@ -1,6 +1,6 @@
 import { FC } from "react";
 import './header.scss'
-import mainLogo from '../../assets/images/MainLogo.svg'
+import mainLogo from '../../assets/img/MainLogo.svg'
 import { Link } from "react-router-dom";
 const Header: FC = () => {
     return(
