@@ -17,7 +17,7 @@ const apiClient = axios.create({
 const postOrder = async (orderObj: OrderToPost): Promise<ReturnedOrder> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .post(BASE_URL+'/orders', orderObj)
+      .post('/orders', orderObj)
       .then((response) => {
         resolve(response.data)
       })
@@ -30,7 +30,7 @@ const postOrder = async (orderObj: OrderToPost): Promise<ReturnedOrder> => {
 const postVoucher = async (voucher: string): Promise<ValidatedVoucher> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .post(BASE_URL+'/vouchers/validate', { voucherKey: voucher })
+      .post('/vouchers/validate', { voucherKey: voucher })
       .then((response) => {
         resolve(response.data)
       })
@@ -43,7 +43,7 @@ const postVoucher = async (voucher: string): Promise<ValidatedVoucher> => {
 const getProducts = async (): Promise<Product[]> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .get(BASE_URL+'/products')
+      .get('/products')
       .then((response) => {
         resolve(response.data)
       })
@@ -56,7 +56,7 @@ const getProducts = async (): Promise<Product[]> => {
 const getProduct = async (id: string): Promise<Product> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .get(BASE_URL+`/products/${id}`)
+      .get(`/products/${id}`)
       .then((response) => {
         resolve(response.data)
       })
@@ -69,7 +69,7 @@ const getProduct = async (id: string): Promise<Product> => {
 const getCategories = async (): Promise<Category[]> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .get(BASE_URL+'/category')
+      .get('/category')
       .then((response) => {
         resolve(response.data)
       })
@@ -83,7 +83,7 @@ const getWorkingHours = async (): Promise<FetchedWorkingHours> => {
     console.log('BASE_URL:', BASE_URL)
   return new Promise((resolve, reject) => {
     apiClient
-      .get(BASE_URL+'/working-hours')
+      .get('/working-hours')
       .then((response) => {
         resolve(response.data)
       })
@@ -96,7 +96,7 @@ const getWorkingHours = async (): Promise<FetchedWorkingHours> => {
 const getDeliveryCost = async (): Promise<{deliveryPrice: number}> => {
   return new Promise((resolve, reject) => {
     apiClient
-      .get(BASE_URL+'/orders/delivery')
+      .get('/orders/delivery')
       .then((response) => {
         resolve(response.data)
       })
