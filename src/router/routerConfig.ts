@@ -80,7 +80,7 @@ const ROUTER_CONFIG = [
   },
   {
     name: 'Casino',
-    path: '/casino',
+    path: '/roulette',
     component: Casino,
     exact: true,
   }
