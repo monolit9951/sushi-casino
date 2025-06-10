@@ -2,7 +2,7 @@ export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
 import Roulette from "../../components/roulette/roulette";
 import Item from "../../components/item/item";
 import './casinoPage.scss'
-import Header from "components/header/header";
+// import Header from "components/header/header";
 import Footer from "components/footer/footer";
 // import ModalPrize from "../../components/modalPrize/modalPrize";
 export const mockItems = [
@@ -75,7 +75,7 @@ export const mockItems = [
 function Casino() {
   return (
     <>
-    <Header />
+    {/* <Header /> */}
       <main className="casino_main">
 
         <div className="main_container">

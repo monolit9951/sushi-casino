@@ -19,7 +19,7 @@ const AppContainer = () => {
     <AnimatedAppearance>
       <Flex flexDir="column" minH="100vh" pos="relative">
         <BasketProvider>
-          {!hideLayout && <AppHeader />}
+          <AppHeader />
           <Box as="main" flex="1 0 auto">
             <Routes />
           </Box>

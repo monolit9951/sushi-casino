@@ -1,6 +1,6 @@
 import { WorkingHours } from '../types'
 
-const NAV_LINKS = ['/']
+const NAV_LINKS = ['/', '/casino']
 const EXTERNAL_LINKS = [
   'https://www.instagram.com/neptunes.sushi/',
   'tel:+48517102069',

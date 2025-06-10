@@ -77,7 +77,7 @@ const AppHeader = () => {
         ) : (
           <>
             <ExternalLink href={EXTERNAL_LINKS[0]} isExternal>
-              {t(`navbar.l0`)}
+              {t(`navbar.l`)}
             </ExternalLink>
             <Burger isOpen={isOpen} setIsOpen={setIsOpen}/>
           </>
