@@ -36,8 +36,8 @@ const AppHeader = () => {
   const stickyStyle = {
     top: 0,
     zIndex: 1000,
-    backgroundColor: 'white',
-    borderBottom: '1px solid #b8b9ba',
+    backgroundColor: '#0D0D0D',
+    borderBottom: '1px solid #232323',
   }
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

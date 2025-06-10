@@ -10,6 +10,7 @@ import NewsItemPage from '../modules/News/components/NewsItemPage'
 import Reglament from "../pages/Reglament";
 import Privacy from "../pages/Privacy";
 import Casino from 'pages/casinoPage/casinoPage'
+import Roulette from 'components/roulette/roulette'
 
 const ROUTER_CONFIG = [
   {
@@ -80,7 +81,7 @@ const ROUTER_CONFIG = [
   },
   {
     name: 'Casino',
-    path: '/roulette',
+    path: '/casino',
     component: Casino,
     exact: true,
   }
