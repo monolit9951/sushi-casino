@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Flex, useBreakpointValue, chakra, Container } from '@chakra-ui/react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Logo from 'components/Logo'
 import Place from './Place'
@@ -8,6 +8,7 @@ import Burger from './Burger'
 import LanguageSelect from './LanguageSelect'
 import { EXTERNAL_LINKS, NAV_LINKS } from '../../constants'
 import NavBar, { ExternalLink } from './NavBar'
+import casinoLogo from '../../assets/img/MainLogo.svg'
 
 const MainNavLink = chakra(NavLink, {
   baseStyle: {
@@ -36,8 +37,8 @@ const AppHeader = () => {
   const stickyStyle = {
     top: 0,
     zIndex: 1000,
-    backgroundColor: '#0D0D0D',
-    borderBottom: '1px solid #232323',
+    backgroundColor: '#1B1A1A',
+    borderBottom: '1px solid #1C1C1C',
   }
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -55,6 +56,12 @@ const AppHeader = () => {
     }
   }, [isOpen])
 
+
+  // отображаем лого казино вместо сайта суши (только для одного адреса)
+  const HIDE_LAYOUT_ROUTES = ['/casino']
+  const location = useLocation()
+  const hideLayout = HIDE_LAYOUT_ROUTES.includes(location.pathname)
+
   return (
     <Container pos="fixed" as="header" maxWidth="100%" style={stickyStyle} ref={burgerRef}>
       <Flex
@@ -65,23 +72,23 @@ const AppHeader = () => {
         px={{ base: 0, lg: '75px' }}
         py={{ base: 0, lg: '8px' }}
       >
-        <Logo />
-        {isLargerScreen ? (
-          <>
-            <NavBar />
-            <Flex alignItems="center" gap="24px">
-              <Place isLargerScreen={isLargerScreen}/>
-              <LanguageSelect />
-            </Flex>
-          </>
-        ) : (
-          <>
-            <ExternalLink href={EXTERNAL_LINKS[0]} isExternal>
-              {t(`navbar.l`)}
-            </ExternalLink>
-            <Burger isOpen={isOpen} setIsOpen={setIsOpen}/>
-          </>
-        )}
+          {!hideLayout? <Logo /> : <img src={casinoLogo} alt='casinoLogo'/>}
+          {isLargerScreen ? (
+            <>
+              <NavBar />
+              <Flex alignItems="center" gap="24px">
+                <Place isLargerScreen={isLargerScreen}/>
+                <LanguageSelect />
+              </Flex>
+            </>
+          ) : (
+            <>
+              <ExternalLink href={EXTERNAL_LINKS[0]} isExternal>
+                {t(`navbar.l`)}
+              </ExternalLink>
+              <Burger isOpen={isOpen} setIsOpen={setIsOpen}/>
+            </>
+          )}
       </Flex>
       {!isLargerScreen && isOpen && (
         <Flex flexDir="column" alignItems={'flex-end'}>
