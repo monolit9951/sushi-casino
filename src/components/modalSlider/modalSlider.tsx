@@ -83,7 +83,7 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback}) =>{
 
                 <div className="modaSlider_content_container" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
                     <div className="modalSlider_prizeImg">
-                        <Item />
+                        {/* <Item /> */}
                     </div>
 
                     <div className="modalSlider_heading">You Won Visit to Neptunes Massage!</div>

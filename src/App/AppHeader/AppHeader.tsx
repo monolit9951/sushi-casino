@@ -88,9 +88,9 @@ const AppHeader = () => {
             </>
           ) : (
             <>
-              <ExternalLink href={EXTERNAL_LINKS[0]} isExternal>
-                {t(`navbar.l`)}
-              </ExternalLink>
+              <MainNavLink to={!hideLayout? "/roulette" : "/"}>
+                {t(!hideLayout? 'Roulette' : 'Rolls')} {/* Добавьте перевод для "Return" в ваших языковых файлах */}
+              </MainNavLink>
               <Burger isOpen={isOpen} setIsOpen={setIsOpen}/>
             </>
           )}
