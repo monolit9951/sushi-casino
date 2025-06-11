@@ -11,7 +11,7 @@ import { useLocation } from 'react-router-dom'
 const AppContainer = () => {
 
   // && и хайд лейаут роутс применим ТОЛЬКО ДЛЯ СТРАНИЦЫ КАЗИНО (было добавлено ТОЛЬКО ДЛЯ КАЗИНО)
-  const HIDE_LAYOUT_ROUTES = ['/casino']
+  const HIDE_LAYOUT_ROUTES = ['/roulette']
   const location = useLocation()
   const hideLayout = HIDE_LAYOUT_ROUTES.includes(location.pathname)
 
@@ -33,12 +33,14 @@ const AppContainer = () => {
                 bottom={{ base: 0, lg: 'none' }}
                 overflowX="scroll"
               />
-              <Box pos="fixed" top={327} right={0}>
-                <Basket />
-              </Box>
-              <Box pos="fixed" top={400} right={0}>
-                <PhoneCall />
-              </Box>
+              {!hideLayout && <>
+                <Box pos="fixed" top={327} right={0}>
+                  <Basket />
+                </Box>
+                <Box pos="fixed" top={400} right={0}>
+                  <PhoneCall />
+                </Box>
+              </>}
             </>
           )}
         </BasketProvider>

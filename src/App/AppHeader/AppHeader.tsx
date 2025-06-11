@@ -34,11 +34,16 @@ const AppHeader = () => {
   const isLargerScreen = useBreakpointValue({ base: false, lg: true })
   const burgerRef = useRef<HTMLDivElement | null>(null)
 
+  // отображаем лого казино вместо сайта суши (только для одного адреса)
+  const HIDE_LAYOUT_ROUTES = ['/roulette']
+  const location = useLocation()
+  const hideLayout = HIDE_LAYOUT_ROUTES.includes(location.pathname)
+
   const stickyStyle = {
     top: 0,
     zIndex: 1000,
-    backgroundColor: '#1B1A1A',
-    borderBottom: '1px solid #1C1C1C',
+    backgroundColor: hideLayout? '#1B1A1A' : 'white',
+    borderBottom: hideLayout? '1px solid #1C1C1C' : '1px solid rgb(184, 185, 186)',
   }
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -56,11 +61,9 @@ const AppHeader = () => {
     }
   }, [isOpen])
 
-
-  // отображаем лого казино вместо сайта суши (только для одного адреса)
-  const HIDE_LAYOUT_ROUTES = ['/casino']
-  const location = useLocation()
-  const hideLayout = HIDE_LAYOUT_ROUTES.includes(location.pathname)
+  useEffect(() => {
+    setIsOpen(false)
+  }, [location.pathname])
 
   return (
     <Container pos="fixed" as="header" maxWidth="100%" style={stickyStyle} ref={burgerRef}>
@@ -72,7 +75,9 @@ const AppHeader = () => {
         px={{ base: 0, lg: '75px' }}
         py={{ base: 0, lg: '8px' }}
       >
-          {!hideLayout? <Logo /> : <img src={casinoLogo} alt='casinoLogo'/>}
+          {/* <Logo /> */}
+
+          <NavLink children={<img src={casinoLogo} alt='casinoLogo'/>} to={'/'} />
           {isLargerScreen ? (
             <>
               <NavBar />
