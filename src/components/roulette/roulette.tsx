@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import './roulette.scss';
 import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg';
 import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg';
@@ -7,6 +7,8 @@ import ModalSlider from "../modalSlider/modalSlider";
 import { ItemsInterface } from "api/rouletteApi";
 
 const ITEM_WIDTH = 216;
+const ROUNDS = 3; // количество полных кругов
+const FILL_AFTER_WINNER = 10; // количество элементов после победителя
 
 function shuffle<T>(arr: T[]): T[] {
   return [...arr].sort(() => Math.random() - 0.5);
@@ -18,8 +20,6 @@ interface RouletteInterface {
   isError: boolean;
 }
 
-const ROUNDS = 3; // количество полных кругов
-
 const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [items, setItems] = useState<ItemsInterface[]>([]);
@@ -30,7 +30,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   const [promoAccess, setPromoAccess] = useState(true);
   const [promoInput, setPromoInput] = useState('');
 
-  const winnerItem = data[4]; // победитель — можно заменить динамически
+  const winnerItem = data[2]; // победитель — можно заменить динамически
 
   const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPromoInput(event.target.value);
@@ -49,22 +49,28 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
     const totalItems = ROUNDS * shuffled.length + 5;
     const extendedItems: ItemsInterface[] = [];
 
+    // Основная часть
     for (let i = 0; i < totalItems; i++) {
       extendedItems.push(shuffled[i % shuffled.length]);
     }
 
-    extendedItems.push(winnerItem); // победитель в конец
-    setItems(extendedItems);
+    // Победитель
+    extendedItems.push(winnerItem);
 
+    // Добавить ещё 10 элементов после победителя
+    for (let i = 0; i < FILL_AFTER_WINNER; i++) {
+      extendedItems.push(shuffled[i % shuffled.length]);
+    }
+
+    setItems(extendedItems);
     setPosition(0);
     setSpinning(true);
 
-    const finalIndex = extendedItems.length - 1;
+    const finalIndex = extendedItems.length - FILL_AFTER_WINNER - 1;
     const distance = finalIndex * ITEM_WIDTH;
-    const duration = 3000;
+    const duration = 20000;
 
     const start = performance.now();
-
     const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
     const animate = (time: number) => {
