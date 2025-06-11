@@ -1,10 +1,11 @@
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import './roulette.scss';
 import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg';
 import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg';
 import RouletteItem from "../rouletteItem/rouletteItem";
 import ModalSlider from "../modalSlider/modalSlider";
-import { ItemsInterface } from "api/rouletteApi";
+import { getWinner, ItemsInterface } from "api/rouletteApi";
+import { useQuery } from "@chakra-ui/react";
 
 const ITEM_WIDTH = 216;
 const ROUNDS = 3; // количество полных кругов
@@ -30,20 +31,49 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   const [promoAccess, setPromoAccess] = useState(true);
   const [promoInput, setPromoInput] = useState('');
 
-  const winnerItem = data[2]; // победитель — можно заменить динамически
+  const winnerItem = data[1]; // победитель — можно заменить динамически
 
   const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPromoInput(event.target.value);
     setPromoAccess(true);
   };
 
-  const startSpinning = () => {
-    if (spinning) return;
+    const { winnderData, winnerIsLoading } = useQuery<ItemsInterface>({
+      queryKey: ['chosen-item'],
+      queryFn: getWinner('wincode_2'),
+      staleTime: 1000 * 60 * 15,
+      refetchOnWindowFocus: false,
+    });  
+  
+        // при смене формата экрана, roulette_strip уходит вправо тем самым
+        // смещается стрип, но индикатор остаётся как и был, потому при смене
+        // экрана мы будем добавлять в left разницу 
+        const [width, setWidth] = useState(window.innerWidth);
+        const [rouleteStripLeft, setRouleteStripLeft] = useState<number>(0);
+        const idealWidth = 2100; // идеальная ширина экрана
 
-    if (promoInput !== 'wincode_1') {
-      setPromoAccess(false);
-      return;
-    }
+        useEffect(() => {
+        const handleResize = () => {
+            const newWidth = window.innerWidth;
+            setWidth(newWidth);
+            setRouleteStripLeft((newWidth - idealWidth) * 0.5); // Пересчёт при каждом изменении
+        };
+
+        // Первоначальный расчёт
+        handleResize();
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+        }, []); // Пустой массив - добавляем обработчик только один раз
+
+
+    const startSpinning = () => {
+        if (spinning) return;
+            console.log(winnderData)
+        if (promoInput !== 'wincode_1') {
+            setPromoAccess(false);
+            return;
+        }
 
     const shuffled = shuffle(data);
     const totalItems = ROUNDS * shuffled.length + 5;
@@ -85,6 +115,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
         requestAnimationFrame(animate);
       } else {
         setSpinning(false);
+        console.log(winnerItem)
         setModalPrizeShow(true);
       }
     };
@@ -112,11 +143,12 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
               transform: `translateX(-${position}px)`,
               whiteSpace: 'nowrap',
               transition: spinning ? 'none' : 'transform 0.3s ease-out',
+              left: rouleteStripLeft
             }}
           >
             {renderItems.map((item, index) => (
               <div
-                className="roulette_strip_item"
+                className="roulette_strip_item" 
                 key={`${item.id}-${index}`}
                 style={{ display: 'inline-block', width: ITEM_WIDTH }}
               >

@@ -10,39 +10,41 @@
         height: 216px;
         background-color: globals.$color-grey;
         display: flex;
-
+        justify-content: center;
+        
         > .roulette_container {
-                overflow: hidden;
-                width: 100%;
-                margin: 0 auto;
-                box-sizing: border-box;
+            overflow: hidden;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            will-change: transform;
+            
+            > .roulette_strip {
+                position: relative;
                 display: flex;
-                align-items: center;
+                flex-shrink: 0;
+                transition: transform 0s;
                 will-change: transform;
+                backface-visibility: hidden;
 
-                > .roulette_strip {
-                    display: flex;
+                > .roulette_strip_item {
+                    width: 200px;
+                    margin: 0 8px;
+
+                    color: white;
+                    text-align: center;
                     flex-shrink: 0;
-                    transition: transform 0s;
-                    will-change: transform;
-                    backface-visibility: hidden;
 
-                    > .roulette_strip_item {
-                        width: 200px;
-                        margin: 0 8px;
-
-                        color: white;
-                        text-align: center;
-                        flex-shrink: 0;
-
-                        >.roulette_strip_item img {
-                            width: 100px;
-                            height: 100px;
-                            object-fit: cover;
-                            border: 1px solid #555;
-                        }
+                    >.roulette_strip_item img {
+                        width: 100px;
+                        height: 100px;
+                        object-fit: cover;
+                        border: 1px solid #555;
                     }
                 }
+            }
         }
 
         > .roulete_indicator {

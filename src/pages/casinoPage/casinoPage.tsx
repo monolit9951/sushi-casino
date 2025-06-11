@@ -27,15 +27,15 @@ function Casino() {
             <div className="main_description_second">Wpisz swój kod promocyjny, zakręć ruletką i zgarnij smakowite nagrody od naszej restauracji!</div>
           </div>
 
-          <Roulette data={data || []} isLoading={isLoading} isError = {isError}/>
+          <Roulette data={(data || [])} isLoading={isLoading} isError={isError} />
 
           <div className="itemsList">
             <div className="itemsList_heading">Co możesz zgarnąć na kole fortuny?</div>
-            {/* <div className="itemsList_list">
+            <div className="itemsList_list">
               {!isLoading && data?.map((item: ItemsInterface, index: number) => (
                 <Item key={index} data={item} />
               ))}
-            </div> */}
+            </div>
 
             <a className="linkLikeButton_global_presset" href="https://neptunessushi.com/">Zobacz więcej zestawów</a>
           </div>
