@@ -13,25 +13,11 @@ interface RouletteInterface {
   isError: boolean;
 }
 
-// тестовый интерфейс
-interface Item {
-  name: string;
-  img: string;
-}
-
-
 // Количество айтемов в рулетке
 const cells = 60
 
 // Ширина одного элемента в пикселях (с учётом марджина)
 const itemWidth = 216
-
-// Все возможные варианты элементов (TEST)
-const allItems: Item[] = [
-  { name: 'iPhone', img: '/IMG/case/iPhone.png' },
-  { name: 'Keyboard', img: '/IMG/case/keyboard.png' },
-  { name: 'Headphones', img: '/IMG/case/headphones.png' }
-];
 
 const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
 
@@ -44,12 +30,22 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   }
 
   // получение приза по промокоду
-    const { data: winnerData, isLoading: winnerIsLoading, isError: winnerIsError, refetch: refetchWinner } = useQuery<ItemsInterface>({
-      queryKey: ['get-winner'],
-      queryFn: getWinner(promocode),
+    const { 
+      refetch: refetchWinner 
+    } = useQuery<ItemsInterface>({
+      queryKey: ['get-winner', promocode], // Добавляем promocode в queryKey для уникальности запроса
+      queryFn: () => getWinner(promocode),
+      enabled: false, // Отключаем автоматический вызов
       staleTime: 1000 * 60 * 15,
       refetchOnWindowFocus: false,
-      enabled: false
+      onSuccess: (data) => {
+        console.log('Winner data:', data);
+      },
+      onError: (error) => {
+        // Обработка ошибки
+        console.error('Error fetching winner:', error);
+        setPromoAccess(false);
+      }
     });
   
   // модалка приза
@@ -71,6 +67,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   const [isStarted, setIsStarted] = useState<boolean>(false)            //флаг крутится ли рулетка
   const [pendingSpin, setPendingSpin] = useState<boolean>(false)        //флаг для запуска анимации прокрутки 
   const listRef = useRef<HTMLUListElement>(null)                        //реф на юл для стилей и лисенеров
+  const [winnerPrize, setWinnerPrize] = useState<ItemsInterface>()
 
   const winnerIndex = Math.floor(cells / 2);                            //индекс победной ячейки, он всегда по центру
 
@@ -100,27 +97,36 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   }
 
   // запуск кручения рулетки
-  const start = async () =>{
-    if (isStarted) return
-
+ const start = async () => {
+    if (isStarted) return;
+    
     if(promocode === 'wincode_2'){
       setPromoAccess(true)
     } else{
       setPromoAccess(false)
       return
     }
-    
-    setIsStarted(true)
-    resetPosition()
 
-    const newItems = generateSpinItems('Подарок 2')
-    setItems(newItems)
-
-    // ожидание обновления дом для сетАйтемс и запуск анимации
-    setTimeout(() => {
-      setPendingSpin(true)
-    }, 0)
-  }
+    try {
+      setIsStarted(true);
+      // Вызываем refetch для выполнения запроса
+      const { data } = await refetchWinner();
+      
+      if (data) {
+        // Если запрос успешен, запускаем анимацию рулетки
+        resetPosition();
+        const newItems = generateSpinItems(data.name);
+        setItems(newItems);
+        
+        setTimeout(() => {
+          setPendingSpin(true);
+        }, 0);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setIsStarted(false);
+    }
+  };
 
   useEffect(() => {
     if(!pendingSpin || !listRef.current) return
@@ -149,8 +155,8 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
 
       // Логируем выигрыш после подсветки (ТЕСТ)
       setTimeout(() => {
-        const data = items[winnerIndex];
-        console.log('Выигрыш:', data);
+        setWinnerPrize(items[winnerIndex]); 
+        setModalPrizeShow(true)
       }, 0);
 
       // Удаляем слушатель
@@ -201,7 +207,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
         </button>
       </div>
 
-      {modalPrizeShow && <ModalSlider handleCloseModalCallback={handleCloseModalCallback} />}
+      {modalPrizeShow && <ModalSlider handleCloseModalCallback={handleCloseModalCallback} data={winnerPrize}/>}
     </div>
   );
 };

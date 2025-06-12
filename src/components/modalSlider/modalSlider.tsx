@@ -6,12 +6,14 @@ import grabler from '../../assets/img/Grabber.svg'
 import copy from '../../assets/img/copy.svg'
 import alert from '../../assets/img/alert.svg'
 import Item from "../item/item"
+import { ItemsInterface } from "api/rouletteApi"
 
 interface ModalSlideInterface {
     handleCloseModalCallback: () => void
+    data: ItemsInterface
 }
 
-const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback}) =>{
+const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback, data}) =>{
 
     // для отслеживания позиции 
     const [touchStartY, setTouchStartY] = useState<number | null>(null)
