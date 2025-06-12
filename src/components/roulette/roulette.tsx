@@ -1,19 +1,10 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import './roulette.scss';
 import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg';
 import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg';
 import RouletteItem from "../rouletteItem/rouletteItem";
 import ModalSlider from "../modalSlider/modalSlider";
-import { getWinner, ItemsInterface } from "api/rouletteApi";
-import { useQuery } from "@chakra-ui/react";
-
-const ITEM_WIDTH = 216;
-const ROUNDS = 3; // количество полных кругов
-const FILL_AFTER_WINNER = 10; // количество элементов после победителя
-
-function shuffle<T>(arr: T[]): T[] {
-  return [...arr].sort(() => Math.random() - 0.5);
-}
+import {  ItemsInterface } from "api/rouletteApi";
 
 interface RouletteInterface {
   isLoading: boolean;
@@ -21,114 +12,137 @@ interface RouletteInterface {
   isError: boolean;
 }
 
+// тестовый интерфейс
+interface Item {
+  name: string;
+  img: string;
+}
+
+
+// Количество айтемов в рулетке
+const cells = 60
+
+// Ширина одного элемента в пикселях (с учётом марджина)
+const itemWidth = 216
+
+// Все возможные варианты призов (элементов)
+const allItems: Item[] = [
+  { name: 'iPhone', img: '/IMG/case/iPhone.png' },
+  { name: 'Keyboard', img: '/IMG/case/keyboard.png' },
+  { name: 'Headphones', img: '/IMG/case/headphones.png' }
+];
+
 const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [items, setItems] = useState<ItemsInterface[]>([]);
-  const [position, setPosition] = useState(0);
-  const [spinning, setSpinning] = useState(false);
-  const [modalPrizeShow, setModalPrizeShow] = useState(false);
 
-  const [promoAccess, setPromoAccess] = useState(true);
-  const [promoInput, setPromoInput] = useState('');
+  // промокод
+  const [promoAccess, setPromoAccess] = useState<boolean>(true)
+  const [promocode, setPromocode] = useState<string>('')
+  const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) =>{
+    setPromocode(event.target.value)
+  }
 
-  const winnerItem = data[1]; // победитель — можно заменить динамически
-
-  const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPromoInput(event.target.value);
-    setPromoAccess(true);
-  };
-
-    const { winnderData, winnerIsLoading } = useQuery<ItemsInterface>({
-      queryKey: ['chosen-item'],
-      queryFn: getWinner('wincode_2'),
-      staleTime: 1000 * 60 * 15,
-      refetchOnWindowFocus: false,
-    });  
+  // модалка приза
+  const [modalPrizeShow, setModalPrizeShow] = useState<boolean>(false)
   
-        // при смене формата экрана, roulette_strip уходит вправо тем самым
-        // смещается стрип, но индикатор остаётся как и был, потому при смене
-        // экрана мы будем добавлять в left разницу 
-        const [width, setWidth] = useState(window.innerWidth);
-        const [rouleteStripLeft, setRouleteStripLeft] = useState<number>(0);
-        const idealWidth = 2100; // идеальная ширина экрана
+  const handleCloseModalCallback = () =>{
+    setModalPrizeShow(false)
+  }
 
-        useEffect(() => {
-        const handleResize = () => {
-            const newWidth = window.innerWidth;
-            setWidth(newWidth);
-            setRouleteStripLeft((newWidth - idealWidth) * 0.5); // Пересчёт при каждом изменении
-        };
+  // функция случайного выбора приза из allItems
+  const getItem = ():Item =>{
+    const index = Math.floor(Math.random() * allItems.length)
+    return allItems[index]
+  }
 
-        // Первоначальный расчёт
-        handleResize();
+  const [items, setItems] = useState<Item[]>([])                        //массив элементов для показа в рулетке
+  const [isStarted, setIsStarted] = useState<boolean>(false)            //флаг крутится ли рулетка
+  const [pendingSpin, setPendingSpin] = useState<boolean>(false)        //флаг для запуска анимации прокрутки 
+  const listRef = useRef<HTMLUListElement>(null)                        //реф на юл для стилей и лисенеров
 
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-        }, []); // Пустой массив - добавляем обработчик только один раз
+  const winnerIndex = Math.floor(cells / 2);                            //индекс победной ячейки, он всегда по центру
 
+  // массив для рулетки, в середину засовываем выигрышный айтем
+  const generateSpinItems = ():Item[] =>{
+    const newItems: Item[] = Array.from({length: cells}, getItem)
+    const targetItem = allItems.find(item => item.name === 'Keyboard')!
+    newItems[winnerIndex] = targetItem
+    return newItems
+  }
 
-    const startSpinning = () => {
-        if (spinning) return;
-            console.log(winnderData)
-        if (promoInput !== 'wincode_1') {
-            setPromoAccess(false);
-            return;
-        }
+  // при первом рендере создаём список айтемов
+  useEffect(() => {
+    setItems(generateSpinItems())
+  }, [])
 
-    const shuffled = shuffle(data);
-    const totalItems = ROUNDS * shuffled.length + 5;
-    const extendedItems: ItemsInterface[] = [];
+  // сброс позиции списка перед анимацией
+  const resetPosition = () =>{
+    if(!listRef.current) return;
+    listRef.current.style.transition = 'none'
+    listRef.current.style.left = '50%'
+    listRef.current.style.transform = 'translate3d(0, 0, 0)'
+    void listRef.current.offsetWidth
+  }
 
-    // Основная часть
-    for (let i = 0; i < totalItems; i++) {
-      extendedItems.push(shuffled[i % shuffled.length]);
-    }
+  // запуск кручения рулетки
+  const start = () =>{
+    if (isStarted) return
 
-    // Победитель
-    extendedItems.push(winnerItem);
+    setIsStarted(true)
+    resetPosition()
 
-    // Добавить ещё 10 элементов после победителя
-    for (let i = 0; i < FILL_AFTER_WINNER; i++) {
-      extendedItems.push(shuffled[i % shuffled.length]);
-    }
+    const newItems = generateSpinItems()
+    setItems(newItems)
 
-    setItems(extendedItems);
-    setPosition(0);
-    setSpinning(true);
+    // ожидание обновления дом для сетАйтемс и запуск анимации
+    setTimeout(() => {
+      setPendingSpin(true)
+    }, 0)
+  }
 
-    const finalIndex = extendedItems.length - FILL_AFTER_WINNER - 1;
-    const distance = finalIndex * ITEM_WIDTH;
-    const duration = 20000;
+  useEffect(() => {
+    if(!pendingSpin || !listRef.current) return
 
-    const start = performance.now();
-    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+    const stopPosition = -winnerIndex * itemWidth - itemWidth / 2 + 'px'
 
-    const animate = (time: number) => {
-      const elapsed = time - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = easeOut(progress);
-      const newPosition = distance * eased;
+    listRef.current.querySelectorAll('.roulette_strip_item').forEach(el => {
+      el.classList.remove('active')
+    })
 
-      setPosition(newPosition);
+    // Анимации
+    listRef.current.style.transition = '5s cubic-bezier(0.21, 0.53, 0.29, 0.99)';
+    listRef.current.style.left = '50%';
+    listRef.current.style.transform = `translate3d(${stopPosition}, 0, 0)`;
 
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setSpinning(false);
-        console.log(winnerItem)
-        setModalPrizeShow(true);
-      }
+    const onTransitionEnd = (e: TransitionEvent) => {
+      if (e.propertyName !== 'transform') return; 
+
+      setIsStarted(false);
+      setPendingSpin(false);
+
+      // Добавляем класс active к выигрышному элементу (для подсветки ТЕСТ)
+      const liElements = listRef.current?.querySelectorAll('li') || [];
+      const winnerElement = liElements[winnerIndex];
+      winnerElement?.classList.add('active');
+
+      // Логируем выигрыш после подсветки (ТЕСТ)
+      setTimeout(() => {
+        const data = items[winnerIndex];
+        console.log('Выигрыш:', data);
+      }, 0);
+
+      // Удаляем слушатель
+      listRef.current?.removeEventListener('transitionend', onTransitionEnd);
     };
 
-    requestAnimationFrame(animate);
-  };
+    // слушатель для окончания анимации
+    listRef.current.addEventListener('transitionend', onTransitionEnd);
 
-  const handleCloseModalCallback = () => {
-    setModalPrizeShow(false);
-  };
-
-  const renderItems = items.length > 0 ? items : data;
-
+    // размонтировка и снятия слушателя
+    return () => {
+      listRef.current?.removeEventListener('transitionend', onTransitionEnd);
+    };
+  }, [pendingSpin])
+ 
   return (
     <div className="roulette">
       <div className="roulette_inner">
@@ -136,26 +150,14 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
           <img src={indicatorTop} alt="indicatorUp" />
           <img src={indicatorBottom} alt="indicatorDown" />
         </div>
-        <div className="roulette_container" ref={containerRef}>
-          <div
-            className="roulette_strip"
-            style={{
-              transform: `translateX(-${position}px)`,
-              whiteSpace: 'nowrap',
-              transition: spinning ? 'none' : 'transform 0.3s ease-out',
-              left: rouleteStripLeft
-            }}
-          >
-            {renderItems.map((item, index) => (
-              <div
-                className="roulette_strip_item" 
-                key={`${item.id}-${index}`}
-                style={{ display: 'inline-block', width: ITEM_WIDTH }}
-              >
-                <RouletteItem item={item} />
-              </div>
+        <div className="roulette_container">
+          <ul className="roulette_strip" ref={listRef}>
+            {items.map((item: Item, index: number) => (
+                          <li className="roulette_strip_item">
+              <RouletteItem key={index} item={item}/>
+            </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
 
@@ -171,7 +173,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
             onChange={handlePromoInput}
           />
         </div>
-        <button className="button_global_presset" onClick={startSpinning} disabled={spinning}>
+        <button className="button_global_presset" onClick={start}>
           Spin a Wheel
         </button>
       </div>

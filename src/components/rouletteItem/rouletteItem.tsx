@@ -3,14 +3,19 @@ import sampleItem from '../../assets/img/sushiSample.png'
 import './rouletteItem.scss'
 import { ItemsInterface } from "api/rouletteApi";
 
+interface Item {
+  name: string;
+  img: string;
+}
+
 interface RouletteItemInterface {
-    item: ItemsInterface
+    item: Item
 }
 
 const RouletteItem: FC <RouletteItemInterface>= ({item}) => {
     return(
         <div className="rouletteItem">
-            <img src={item.imageUrl} alt={item.name} />
+            <img src={''} alt={item.name} />
         </div>
     )
 }
