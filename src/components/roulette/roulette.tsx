@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
+import {  FC, useEffect, useRef, useState } from "react";
 import './roulette.scss';
 import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg';
 import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg';
@@ -207,7 +207,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
         </button>
       </div>
 
-      {modalPrizeShow && <ModalSlider handleCloseModalCallback={handleCloseModalCallback} data={winnerPrize}/>}
+      {modalPrizeShow && winnerPrize && <ModalSlider handleCloseModalCallback={handleCloseModalCallback} data={winnerPrize}/>}
     </div>
   );
 };
