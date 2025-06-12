@@ -4,7 +4,8 @@ import './casinoPage.scss'
 // import Header from "components/header/header";
 import Footer from "components/footer/footer";
 import { useQuery } from '@tanstack/react-query'
-import { getItemsSet, ItemsInterface } from "api/rouletteApi";
+import { ItemsInterface } from "api/rouletteApi";
+import { getItemsSet } from "api";
 
 
 function Casino() {

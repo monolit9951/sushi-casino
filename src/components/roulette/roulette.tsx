@@ -4,7 +4,8 @@ import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg';
 import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg';
 import RouletteItem from "../rouletteItem/rouletteItem";
 import ModalSlider from "../modalSlider/modalSlider";
-import {  getWinner, ItemsInterface } from "api/rouletteApi";
+import { ItemsInterface } from "api/rouletteApi";
+import { getWinner } from "api";
 import { useQuery } from '@tanstack/react-query'
 
 interface RouletteInterface {

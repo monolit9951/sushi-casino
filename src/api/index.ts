@@ -6,6 +6,7 @@ import {
   ReturnedOrder,
   ValidatedVoucher,
 } from '../types'
+import { ItemsInterface } from './rouletteApi'
 
 const BASE_URL = "https://neptunessushi.com/api"
 
@@ -106,4 +107,32 @@ const getDeliveryCost = async (): Promise<{deliveryPrice: number}> => {
   })
 }
 
-export { getProducts, getCategories, getProduct, postOrder, postVoucher, getWorkingHours, getDeliveryCost }
+
+const getItemsSet = async (): Promise<ItemsInterface[]> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get("/casino")
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getWinner = async (code: string): Promise<ItemsInterface> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get(`/casino/random?wincode=${code}`)
+
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export { getProducts, getCategories, getProduct, postOrder, postVoucher, getWorkingHours, getDeliveryCost, getItemsSet, getWinner }
