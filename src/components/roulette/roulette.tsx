@@ -15,11 +15,12 @@ interface RouletteInterface {
   isError: boolean;
 }
 
-// Количество айтемов в рулетке
+// Количество айтемов в рулетке (не меньше 30)
 const cells = 60
-
 // Ширина одного элемента в пикселях (с учётом марджина)
 const itemWidth = 216
+// начальный индекс прокрутки, чтоб слева не было пропусковы
+const startOffset = 5
 
 const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
 
@@ -104,10 +105,13 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
 
   // сброс позиции списка перед анимацией
   const resetPosition = () =>{
+
+    const offset = startOffset * itemWidth;
+
     if(!listRef.current) return;
     listRef.current.style.transition = 'none'
     listRef.current.style.left = '50%'
-    listRef.current.style.transform = 'translate3d(0, 0, 0)'
+    listRef.current.style.transform = `translate3d(${-offset}px, 0, 0)`
     void listRef.current.offsetWidth
   }
 
@@ -150,7 +154,9 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   useEffect(() => {
     if(!pendingSpin || !listRef.current) return
 
-    const stopPosition = -winnerIndex * itemWidth - itemWidth / 2 + 'px'
+    // стоп позиция по центру 
+    const randomOffset = (Math.random() - 0.5) * itemWidth;
+    const stopPosition = -winnerIndex * itemWidth - itemWidth / 2 + randomOffset +  'px'
 
     listRef.current.querySelectorAll('.roulette_strip_item').forEach(el => {
       el.classList.remove('active')
