@@ -113,6 +113,7 @@ const getItemsSet = async (): Promise<ItemsInterface[]> => {
     apiClient
       .get("/casino")
       .then((response) => {
+        console.log(response.data)
         resolve(response.data);
       })
       .catch((error) => {
