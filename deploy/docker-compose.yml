@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  frontend-jackpotrolls.pl:
+    container_name: frontend_jackpotrolls.pl
+    image: ${HOST_FOR_DOCKER_IMAGE}/neptunessushi_frontend_jackpotrolls.pl_${ENVIRONMENT}:${VERSION}
+    restart: always
+    ports:
+      - "3001:80"
+    environment:
+      - VITE_APP_MAIN_API=https://neptunessushi.com/api
+
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9999:8080"
+    networks:
+      - backend_network
+    environment:
+      - DOZZLE_NO_ANALYTICS=true
+      - DOZZLE_USERNAME=${DOZZLE_USERNAME}
+      - DOZZLE_PASSWORD=${DOZZLE_PASSWORD}
+      - DOZZLE_KEY=true
+
+networks:
+  backend_network:
+    driver: bridge
