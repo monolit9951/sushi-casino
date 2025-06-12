@@ -4,7 +4,8 @@ import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg';
 import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg';
 import RouletteItem from "../rouletteItem/rouletteItem";
 import ModalSlider from "../modalSlider/modalSlider";
-import {  ItemsInterface } from "api/rouletteApi";
+import {  getWinner, ItemsInterface } from "api/rouletteApi";
+import { useQuery } from '@tanstack/react-query'
 
 interface RouletteInterface {
   isLoading: boolean;
@@ -42,6 +43,15 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
     setPromocode(event.target.value)
   }
 
+  // получение приза по промокоду
+    const { data: winnerData, isLoading: winnerIsLoading, isError: winnerIsError, refetch: refetchWinner } = useQuery<ItemsInterface>({
+      queryKey: ['get-winner'],
+      queryFn: getWinner(promocode),
+      staleTime: 1000 * 60 * 15,
+      refetchOnWindowFocus: false,
+      enabled: false
+    });
+  
   // модалка приза
   const [modalPrizeShow, setModalPrizeShow] = useState<boolean>(false)
   
@@ -65,10 +75,10 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   const winnerIndex = Math.floor(cells / 2);                            //индекс победной ячейки, он всегда по центру
 
   // массив для рулетки, в середину засовываем выигрышный айтем
-  const generateSpinItems = ():ItemsInterface[] =>{
+  const generateSpinItems = (prizeName: string):ItemsInterface[] =>{
     if (!data || data.length === 0) return [];
     const newItems: ItemsInterface[] = Array.from({length: cells}, getItem)
-    const targetItem = data.find(item => item.name === 'Подарок 555')!
+    const targetItem = data.find(item => item.name === prizeName)!
     newItems[winnerIndex] = targetItem
     return newItems
   }
@@ -76,7 +86,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   // при первом рендере создаём список айтемов
   useEffect(() => {
     if(!isLoading && data.length > 0){
-      setItems(generateSpinItems())
+      setItems(generateSpinItems('Подарок 555'))
     }
   }, [])
 
@@ -90,13 +100,20 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   }
 
   // запуск кручения рулетки
-  const start = () =>{
+  const start = async () =>{
     if (isStarted) return
 
+    if(promocode === 'wincode_2'){
+      setPromoAccess(true)
+    } else{
+      setPromoAccess(false)
+      return
+    }
+    
     setIsStarted(true)
     resetPosition()
 
-    const newItems = generateSpinItems()
+    const newItems = generateSpinItems('Подарок 2')
     setItems(newItems)
 
     // ожидание обновления дом для сетАйтемс и запуск анимации

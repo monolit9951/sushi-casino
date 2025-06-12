@@ -8,16 +8,18 @@
     > .roulette_inner{
         position: relative;
         height: 216px;
+        padding: 8px 0;
         width: 100%;
         background-color: globals.$color-grey;
         display: flex;
         justify-content: center;
-        
+        // align-items: center;
         > .roulette_container {
             overflow: hidden;
-
+        
             > .roulette_strip {
                 position: relative;
+                height: 100%;
                 display: inline-flex;
                 left: 0;
                 transform: translate3d(0, 0, 0);
@@ -30,7 +32,7 @@
                     justify-content: center;
                     align-items: center;
                     width: 200px;
-                    height: 160px;
+                    height: 200px;
                     opacity: 0.5;
                     transition: 0.3s ease;
                     margin: 0 8px;
@@ -53,10 +55,10 @@
             height: 50px;
             display: flex;
             flex-direction: column;
-            gap: 128px;
+            gap: 138px;
             > img {
                 width: 68px;
-                margin-top: 12px;
+                margin-top: 4px;
             }
         }
     }
