@@ -27,7 +27,7 @@ function Casino() {
             <div className="main_description_second">Wpisz swój kod promocyjny, zakręć ruletką i zgarnij smakowite nagrody od naszej restauracji!</div>
           </div>
 
-          <Roulette data={(data || [])} isLoading={isLoading} isError={isError} />
+          {!isLoading && <Roulette data={(data || [])} isLoading={isLoading} isError={isError} />}
 
           <div className="itemsList">
             <div className="itemsList_heading">Co możesz zgarnąć na kole fortuny?</div>

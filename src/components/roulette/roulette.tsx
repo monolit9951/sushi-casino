@@ -25,7 +25,7 @@ const cells = 60
 // Ширина одного элемента в пикселях (с учётом марджина)
 const itemWidth = 216
 
-// Все возможные варианты призов (элементов)
+// Все возможные варианты элементов (TEST)
 const allItems: Item[] = [
   { name: 'iPhone', img: '/IMG/case/iPhone.png' },
   { name: 'Keyboard', img: '/IMG/case/keyboard.png' },
@@ -33,6 +33,7 @@ const allItems: Item[] = [
 ];
 
 const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
+
 
   // промокод
   const [promoAccess, setPromoAccess] = useState<boolean>(true)
@@ -49,12 +50,14 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   }
 
   // функция случайного выбора приза из allItems
-  const getItem = ():Item =>{
-    const index = Math.floor(Math.random() * allItems.length)
-    return allItems[index]
+  const getItem = ():ItemsInterface =>{
+
+    if (!data || data.length === 0) return {description: '', id: 0, imageUrl: '', name: '', probability: 1, rarity: 'COMMON'}
+    const index = Math.floor(Math.random() * data.length)
+    return data[index]
   }
 
-  const [items, setItems] = useState<Item[]>([])                        //массив элементов для показа в рулетке
+  const [items, setItems] = useState<ItemsInterface[]>([])              //массив элементов для показа в рулетке
   const [isStarted, setIsStarted] = useState<boolean>(false)            //флаг крутится ли рулетка
   const [pendingSpin, setPendingSpin] = useState<boolean>(false)        //флаг для запуска анимации прокрутки 
   const listRef = useRef<HTMLUListElement>(null)                        //реф на юл для стилей и лисенеров
@@ -62,16 +65,19 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   const winnerIndex = Math.floor(cells / 2);                            //индекс победной ячейки, он всегда по центру
 
   // массив для рулетки, в середину засовываем выигрышный айтем
-  const generateSpinItems = ():Item[] =>{
-    const newItems: Item[] = Array.from({length: cells}, getItem)
-    const targetItem = allItems.find(item => item.name === 'Keyboard')!
+  const generateSpinItems = ():ItemsInterface[] =>{
+    if (!data || data.length === 0) return [];
+    const newItems: ItemsInterface[] = Array.from({length: cells}, getItem)
+    const targetItem = data.find(item => item.name === 'Подарок 555')!
     newItems[winnerIndex] = targetItem
     return newItems
   }
 
   // при первом рендере создаём список айтемов
   useEffect(() => {
-    setItems(generateSpinItems())
+    if(!isLoading && data.length > 0){
+      setItems(generateSpinItems())
+    }
   }, [])
 
   // сброс позиции списка перед анимацией
@@ -109,7 +115,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
     })
 
     // Анимации
-    listRef.current.style.transition = '5s cubic-bezier(0.21, 0.53, 0.29, 0.99)';
+    listRef.current.style.transition = '10s cubic-bezier(0.21, 0.53, 0.29, 0.99)';
     listRef.current.style.left = '50%';
     listRef.current.style.transform = `translate3d(${stopPosition}, 0, 0)`;
 
@@ -152,10 +158,10 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
         </div>
         <div className="roulette_container">
           <ul className="roulette_strip" ref={listRef}>
-            {items.map((item: Item, index: number) => (
-                          <li className="roulette_strip_item">
-              <RouletteItem key={index} item={item}/>
-            </li>
+            {!isLoading && items.length > 0 && items.map((item, index) => (
+              <li key={index} className="roulette_strip_item">
+                <RouletteItem item={item} />
+              </li>
             ))}
           </ul>
         </div>

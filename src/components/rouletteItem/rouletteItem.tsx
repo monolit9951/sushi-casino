@@ -1,23 +1,20 @@
 import { FC } from "react";
-import sampleItem from '../../assets/img/sushiSample.png'
 import './rouletteItem.scss'
 import { ItemsInterface } from "api/rouletteApi";
 
-interface Item {
-  name: string;
-  img: string;
-}
-
 interface RouletteItemInterface {
-    item: Item
+    item: ItemsInterface
 }
 
-const RouletteItem: FC <RouletteItemInterface>= ({item}) => {
-    return(
-        <div className="rouletteItem">
-            <img src={''} alt={item.name} />
-        </div>
-    )
-}
+const RouletteItem: FC<RouletteItemInterface> = ({ item }) => {
+  if (!item) return null;
+
+  return (
+    <div className="rouletteItem">
+      <img src={''} alt={item.name || ''} />
+    </div>
+  );
+};
+
 
 export default RouletteItem
