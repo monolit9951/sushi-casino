@@ -5,8 +5,8 @@ import './modalSlider.scss'
 import grabler from '../../assets/img/Grabber.svg'
 import copy from '../../assets/img/copy.svg'
 import alert from '../../assets/img/alert.svg'
-import Item from "../item/item"
 import { ItemsInterface } from "api/rouletteApi"
+import Item from "components/item/item"
 
 interface ModalSlideInterface {
     handleCloseModalCallback: () => void
@@ -85,10 +85,10 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback, data}) 
 
                 <div className="modaSlider_content_container" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
                     <div className="modalSlider_prizeImg">
-                        {/* <Item /> */}
+                        <Item data = {data}/>
                     </div>
 
-                    <div className="modalSlider_heading">You Won Visit to Neptunes Massage!</div>
+                    <div className="modalSlider_heading">You Won {data.name}</div>
 
                     <div className="modalSlider_details">
                         <div className="modalSlider_details_heading">Details</div>
