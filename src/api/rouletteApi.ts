@@ -2,7 +2,8 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 // import { Rarity } from "../pages/home/Home.tsx";
 
-const BASE_URL = import.meta.env.VITE_APP_MAIN_API;
+// const BASE_URL = import.meta.env.VITE_APP_MAIN_API;
+const BASE_URL = "https://neptunessushi.com/api"
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
