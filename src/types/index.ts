@@ -159,6 +159,24 @@ type RootState = {
   product: ProductsState
 }
 
+interface promocodesInterfase{
+  id: number,
+  code: string,
+  dateUntilValid: number,
+  quantityOfUse: number
+}
+
+type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+
+interface ItemsInterface {
+  description: string;
+  id: number;
+  imageUrl: string;
+  name: string;
+  probability: number;
+  rarity: Rarity;
+}
+
 type BasketTypes = 'basket' | 'delivery' | 'pay' | 'orderResponse'
 
 type AppDispatch = typeof store.dispatch
@@ -182,5 +200,8 @@ export type {
   SelectedProduct,
   ConstCategory,
   FetchedWorkingHours,
-  VoucherProps
+  VoucherProps,
+  promocodesInterfase,
+  Rarity,
+  ItemsInterface
 }

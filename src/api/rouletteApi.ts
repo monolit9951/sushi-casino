@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { ItemsInterface } from "types";
 // import { Rarity } from "../pages/home/Home.tsx";
 
 // const BASE_URL = import.meta.env.VITE_APP_MAIN_API;
@@ -10,16 +11,6 @@ const apiClient = axios.create({
   withCredentials: false,
 });
 
-export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
-
-export interface ItemsInterface {
-  description: string;
-  id: number;
-  imageUrl: string;
-  name: string;
-  probability: number;
-  rarity: Rarity;
-}
 
 export const getItemsSet = async (): Promise<ItemsInterface[]> => {
   return new Promise((resolve, reject) => {

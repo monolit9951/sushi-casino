@@ -1,12 +1,13 @@
 import axios from 'axios'
 import {
   Category, FetchedWorkingHours,
+  ItemsInterface,
   OrderToPost,
   Product,
+  promocodesInterfase,
   ReturnedOrder,
   ValidatedVoucher,
 } from '../types'
-import { ItemsInterface } from './rouletteApi'
 
 const BASE_URL = "https://neptunessushi.com/api"
 
@@ -136,4 +137,24 @@ const getWinner = async (code: string): Promise<ItemsInterface> => {
   });
 };
 
-export { getProducts, getCategories, getProduct, postOrder, postVoucher, getWorkingHours, getDeliveryCost, getItemsSet, getWinner }
+
+
+const getPromocodes = async (): Promise<promocodesInterfase[]> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get(`/wincode`, {
+        headers: {
+          'X-Secret': 'test-secret-key'
+        }
+      })
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+
+export { getProducts, getCategories, getProduct, postOrder, postVoucher, getWorkingHours, getDeliveryCost, getItemsSet, getWinner, getPromocodes}

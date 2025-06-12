@@ -5,8 +5,9 @@ import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg';
 import RouletteItem from "../rouletteItem/rouletteItem";
 import ModalSlider from "../modalSlider/modalSlider";
 import { ItemsInterface } from "api/rouletteApi";
-import { getWinner } from "api";
+import { getPromocodes, getWinner} from "api";
 import { useQuery } from '@tanstack/react-query'
+import { promocodesInterfase } from "types";
 
 interface RouletteInterface {
   isLoading: boolean;
@@ -22,11 +23,24 @@ const itemWidth = 216
 
 const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
 
+  // получение промокодов
+    const { data: promocodes, isLoading: promocodesLoading} = useQuery<promocodesInterfase[]>({
+      queryKey: ['get-promocodes'],
+      queryFn: getPromocodes,
+      enabled: true,
+      staleTime: 1000 * 60 * 15,
+      refetchOnWindowFocus: false,
+
+      // onSuccess: (promocodes) => {
+      //   console.log(promocodes);
+      // },
+    });
 
   // промокод
   const [promoAccess, setPromoAccess] = useState<boolean>(true)
   const [promocode, setPromocode] = useState<string>('')
   const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) =>{
+    setPromoAccess(true)
     setPromocode(event.target.value)
   }
 
@@ -101,11 +115,15 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
  const start = async () => {
     if (isStarted) return;
     
-    if(promocode === 'wincode_2'){
-      setPromoAccess(true)
-    } else{
-      setPromoAccess(false)
+    // проверка на существование промокодов и статус загрузки
+    if (promocodesLoading || !promocodes){
       return
+    }
+
+    // проверка на наличие введённого промокода в промокодах
+    if (promocodes && !promocodes?.some(p => p.code === promocode)) {
+      setPromoAccess(false)
+      return;
     }
 
     try {

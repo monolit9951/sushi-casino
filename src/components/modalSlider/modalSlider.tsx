@@ -15,6 +15,8 @@ interface ModalSlideInterface {
 
 const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback, data}) =>{
 
+    // генерация нового промокода
+
     // для отслеживания позиции 
     const [touchStartY, setTouchStartY] = useState<number | null>(null)
 
