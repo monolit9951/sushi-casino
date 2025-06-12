@@ -5,8 +5,8 @@ import './modalSlider.scss'
 import grabler from '../../assets/img/Grabber.svg'
 import copy from '../../assets/img/copy.svg'
 import alert from '../../assets/img/alert.svg'
-import { ItemsInterface } from "api/rouletteApi"
 import Item from "components/item/item"
+import { ItemsInterface } from "types"
 
 interface ModalSlideInterface {
     handleCloseModalCallback: () => void
