@@ -1,76 +1,11 @@
-export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
 import Roulette from "../../components/roulette/roulette";
 import Item from "../../components/item/item";
 import './casinoPage.scss'
-import Header from "components/header/header";
+// import Header from "components/header/header";
 import Footer from "components/footer/footer";
-// import ModalPrize from "../../components/modalPrize/modalPrize";
-export const mockItems = [
-  {
-    id: 8,
-    name: "Common",
-    image: "/sushi8.jpeg",
-    rarity: "common",
-    description: "Lorem ipsum dolor sit amet",
-  },
-  {
-    id: 7,
-    name: "Common",
-    image: "/sushi7.jpg",
-    rarity: "common",
-    description:
-      "'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet",
-  },
-  {
-    id: 2,
-    name: "Uncommon",
-    image: "/sushi2.jpeg",
-    rarity: "uncommon",
-    description: "'Lorem ipsum dolor sit amet",
-  },
-  {
-    id: 6,
-    name: "Uncommon",
-    image: "/sushi6.jpeg",
-    rarity: "uncommon",
-    description: "'Lorem ipsum dolor sit amet",
-  },
-  {
-    id: 3,
-    name: "Rare",
-    image: "/sushi3.jpeg",
-    rarity: "rare",
-    description: "'Lorem ipsum dolor sit amet",
-  },
-  {
-    id: 1,
-    name: "Rere",
-    image: "/sushi1.jpeg",
-    rarity: "rare",
-    description: "'Lorem ipsum dolor sit amet",
-  },
-  {
-    id: 4,
-    name: "Epic",
-    image: "/sushi4.jpeg",
-    rarity: "epic",
-    description: "'Lorem ipsum dolor sit amet",
-  },
-  {
-    id: 5,
-    name: "Legendary",
-    image: "/sushi5.jpeg",
-    rarity: "legendary",
-    description: "'Lorem ipsum dolor sit amet",
-  },
-  {
-    id: 9,
-    name: "Mythical",
-    image: "/sushi9.png",
-    rarity: "mythical",
-    description: "'Lorem ipsum dolor sit amet",
-  },
-];
+import { useQuery } from '@tanstack/react-query'
+import { getItemsSet, ItemsInterface } from "api/rouletteApi";
+
 
 function Casino() {
   return (

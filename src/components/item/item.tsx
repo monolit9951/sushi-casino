@@ -1,6 +1,10 @@
 import { FC } from "react";
-import sampleItem from '../../assets/img/sushiSample.png'
 import './item.scss'
+import { ItemsInterface } from "api/rouletteApi";
+
+interface ItemInterface {
+    data: ItemsInterface
+}
 
 // вместо него можно переиспользовать rouleteItem, различия только в размерах (200/109)
 const Item: FC = () => {

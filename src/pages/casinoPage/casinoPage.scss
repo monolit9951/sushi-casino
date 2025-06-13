@@ -3,6 +3,7 @@
 .casino_main{
     background-image: url('../../assets/img/backgroundOptima.png');
     overscroll-behavior: none;
+    background-attachment: fixed;
     color: white;
     // background-color: black;
     // background-repeat: no-repeat;
@@ -70,4 +71,9 @@
             }
         }
     }
+}
+
+// ОТСТУП ТАК КАК ХЕДЕР ФИКСИРОВАН
+.casino_main{
+    margin-top: 64px;
 }

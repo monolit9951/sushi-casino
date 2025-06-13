@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Flex, useBreakpointValue, chakra, Container } from '@chakra-ui/react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Logo from 'components/Logo'
 import Place from './Place'
@@ -8,6 +8,7 @@ import Burger from './Burger'
 import LanguageSelect from './LanguageSelect'
 import { EXTERNAL_LINKS, NAV_LINKS } from '../../constants'
 import NavBar, { ExternalLink } from './NavBar'
+import casinoLogo from '../../assets/img/MainLogo.svg'
 
 const MainNavLink = chakra(NavLink, {
   baseStyle: {
@@ -65,23 +66,25 @@ const AppHeader = () => {
         px={{ base: 0, lg: '75px' }}
         py={{ base: 0, lg: '8px' }}
       >
-        <Logo />
-        {isLargerScreen ? (
-          <>
-            <NavBar />
-            <Flex alignItems="center" gap="24px">
-              <Place isLargerScreen={isLargerScreen}/>
-              <LanguageSelect />
-            </Flex>
-          </>
-        ) : (
-          <>
-            <ExternalLink href={EXTERNAL_LINKS[0]} isExternal>
-              {t(`navbar.l0`)}
-            </ExternalLink>
-            <Burger isOpen={isOpen} setIsOpen={setIsOpen}/>
-          </>
-        )}
+          {/* <Logo /> */}
+
+          <NavLink children={<img src={casinoLogo} alt='casinoLogo'/>} to={'/'} />
+          {isLargerScreen ? (
+            <>
+              <NavBar />
+              <Flex alignItems="center" gap="24px">
+                <Place isLargerScreen={isLargerScreen}/>
+                <LanguageSelect />
+              </Flex>
+            </>
+          ) : (
+            <>
+              <MainNavLink to={!hideLayout? "/roulette" : "/"}>
+                {t(!hideLayout? 'Roulette' : 'Rolls')} {/* Добавьте перевод для "Return" в ваших языковых файлах */}
+              </MainNavLink>
+              <Burger isOpen={isOpen} setIsOpen={setIsOpen}/>
+            </>
+          )}
       </Flex>
       {!isLargerScreen && isOpen && (
         <Flex flexDir="column" alignItems={'flex-end'}>

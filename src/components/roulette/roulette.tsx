@@ -1,16 +1,11 @@
-import { FC, useEffect, useRef, useState } from "react";
-import './roulette.scss'
-import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg'
-import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg'
+import {  FC, useEffect, useRef, useState } from "react";
+import './roulette.scss';
+import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg';
+import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg';
 import RouletteItem from "../rouletteItem/rouletteItem";
-// import ModalPrize from "../modalPrize/modalPrize";
 import ModalSlider from "../modalSlider/modalSlider";
-
-type Item = {
-  id: number;
-  image: string;
-  name: string;
-};
+import {  getWinner, ItemsInterface } from "api/rouletteApi";
+import { useQuery } from '@tanstack/react-query'
 
 // ТЕСТОВЫЕ АЙТЕМЫ
 const ORIGINAL_ITEMS: Item[] = Array.from({ length: 10 }).map((_, i) => ({

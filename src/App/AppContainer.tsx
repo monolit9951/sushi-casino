@@ -19,7 +19,7 @@ const AppContainer = () => {
     <AnimatedAppearance>
       <Flex flexDir="column" minH="100vh" pos="relative">
         <BasketProvider>
-          {!hideLayout && <AppHeader />}
+          <AppHeader />
           <Box as="main" flex="1 0 auto">
             <Routes />
           </Box>
@@ -33,12 +33,14 @@ const AppContainer = () => {
                 bottom={{ base: 0, lg: 'none' }}
                 overflowX="scroll"
               />
-              <Box pos="fixed" top={327} right={0}>
-                <Basket />
-              </Box>
-              <Box pos="fixed" top={400} right={0}>
-                <PhoneCall />
-              </Box>
+              {!hideLayout && <>
+                <Box pos="fixed" top={327} right={0}>
+                  <Basket />
+                </Box>
+                <Box pos="fixed" top={400} right={0}>
+                  <PhoneCall />
+                </Box>
+              </>}
             </>
           )}
         </BasketProvider>
