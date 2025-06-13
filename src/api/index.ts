@@ -82,7 +82,6 @@ const getCategories = async (): Promise<Category[]> => {
 }
 
 const getWorkingHours = async (): Promise<FetchedWorkingHours> => {
-    console.log('BASE_URL:', BASE_URL)
   return new Promise((resolve, reject) => {
     apiClient
       .get('/working-hours')
@@ -114,7 +113,6 @@ const getItemsSet = async (): Promise<ItemsInterface[]> => {
     apiClient
       .get("/casino")
       .then((response) => {
-        console.log(response.data)
         resolve(response.data);
       })
       .catch((error) => {

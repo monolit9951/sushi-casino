@@ -39,6 +39,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   // промокод
   const [promoAccess, setPromoAccess] = useState<boolean>(true)
   const [promocode, setPromocode] = useState<string>('')
+  const [propPromocode, setPropPromocode] = useState<string>('')
   const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) =>{
     setPromoAccess(true)
     setPromocode(event.target.value)
@@ -53,9 +54,9 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
       enabled: false, // Отключаем автоматический вызов
       staleTime: 1000 * 60 * 15,
       refetchOnWindowFocus: false,
-      onSuccess: (data) => {
-        console.log('Winner data:', data);
-      },
+      // onSuccess: (data) => {
+      //   console.log('Winner data:', data);
+      // },
       onError: (error) => {
         // Обработка ошибки
         console.error('Error fetching winner:', error);
@@ -181,6 +182,8 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
       setTimeout(() => {
         setWinnerPrize(items[winnerIndex]); 
         setModalPrizeShow(true)
+        setPropPromocode(promocode)
+        setPromocode('')
       }, 0);
 
       // Удаляем слушатель
@@ -221,6 +224,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
           </div>
           <input
             type="text"
+            value={promocode}
             className={promoAccess ? 'roulete_promocodeInput' : 'roulete_promocodeInput noPromo'}
             placeholder="Enter a Promo Code"
             onChange={handlePromoInput}
@@ -231,7 +235,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
         </button>
       </div>
 
-      {modalPrizeShow && winnerPrize && <ModalSlider handleCloseModalCallback={handleCloseModalCallback} data={winnerPrize}/>}
+      {modalPrizeShow && winnerPrize && <ModalSlider handleCloseModalCallback={handleCloseModalCallback} data={winnerPrize} promocode={propPromocode}/>}
     </div>
   );
 };

@@ -11,9 +11,10 @@ import { ItemsInterface } from "types"
 interface ModalSlideInterface {
     handleCloseModalCallback: () => void
     data: ItemsInterface
+    promocode: string
 }
 
-const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback, data}) =>{
+const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback, data, promocode}) =>{
 
     // генерация нового промокода
 
@@ -64,7 +65,7 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback, data}) 
 
     // инстакопирование кода по нажатию
     const handleCopyPromo = () => {
-        navigator.clipboard.writeText("FWOMR_42")
+        navigator.clipboard.writeText(promocode)
     }
 
 
@@ -107,7 +108,7 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback, data}) 
                         </div>
 
                         <button className="modalSlider_details_promocodeCopy" onClick={handleCopyPromo}>
-                            <div className="modalSlider_details_promocodeCopy_promocode">FWOMR_42</div>
+                            <div className="modalSlider_details_promocodeCopy_promocode">{promocode}</div>
                             <img src={copy} alt="copy" />
                         </button>
 
