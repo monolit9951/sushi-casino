@@ -11,7 +11,7 @@ import { useLocation } from 'react-router-dom'
 const AppContainer = () => {
 
   // && и хайд лейаут роутс применим ТОЛЬКО ДЛЯ СТРАНИЦЫ КАЗИНО (было добавлено ТОЛЬКО ДЛЯ КАЗИНО)
-  const HIDE_LAYOUT_ROUTES = ['/casino']
+  const HIDE_LAYOUT_ROUTES = ['/roulette']
   const location = useLocation()
   const hideLayout = HIDE_LAYOUT_ROUTES.includes(location.pathname)
 

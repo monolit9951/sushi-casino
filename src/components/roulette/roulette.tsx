@@ -4,158 +4,240 @@ import indicatorTop from '../../assets/img/rouleteIndicatorTop.svg';
 import indicatorBottom from '../../assets/img/rouleteIndicatorBottom.svg';
 import RouletteItem from "../rouletteItem/rouletteItem";
 import ModalSlider from "../modalSlider/modalSlider";
-import {  getWinner, ItemsInterface } from "api/rouletteApi";
+import { getPromocodes, getWinner} from "api";
 import { useQuery } from '@tanstack/react-query'
+import { ItemsInterface, promocodesInterfase } from "types";
 
-// ТЕСТОВЫЕ АЙТЕМЫ
-const ORIGINAL_ITEMS: Item[] = Array.from({ length: 10 }).map((_, i) => ({
-  id: i,
-  image: `https://picsum.photos/100/100?random=${i}`,
-  name: `Item ${i + 1}`,
-}));
-
-// фиксированное значение ширины айтема + его мерджины(х2)
-const ITEM_WIDTH = 216
-
-// функция перемешивает айтемы
-function shuffle<T>(arr: T[]): T[] {
-  return [...arr].sort(() => Math.random() - 0.5);
+interface RouletteInterface {
+  isLoading: boolean;
+  data: ItemsInterface[];
+  isError: boolean;
 }
 
-const Roulette: FC = () =>{
-    // ссылки на элементы рулетки
-    const containerRef = useRef<HTMLDivElement>(null);
-    const targetDistanceRef = useRef(0);
-    const fixedContainerWidth = useRef(0);
+// Количество айтемов в рулетке (не меньше 30)
+const cells = 60
+// Ширина одного элемента в пикселях (с учётом марджина)
+const itemWidth = 216
+// начальный индекс прокрутки, чтоб слева не было пропусковы
+const startOffset = 5
 
-    // список всех элементов рулетки, позиция остановки, статус вращения
-    const [items, setItems] = useState<Item[]>(() => shuffle(ORIGINAL_ITEMS));
-    const [position, setPosition] = useState(0);
-    const [spinning, setSpinning] = useState(false);
+const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
 
-    // для отображения модалки приза
-    const [modalPrizeShow, setModalPrizeShow] = useState<boolean>(false)
+  // получение промокодов
+    const { data: promocodes, isLoading: promocodesLoading} = useQuery<promocodesInterfase[]>({
+      queryKey: ['get-promocodes'],
+      queryFn: getPromocodes,
+      enabled: true,
+      staleTime: 1000 * 60 * 15,
+      refetchOnWindowFocus: false,
 
-    // для пропсов суши (тут просто имя для отображения)
-    // const [sushiPropName, setSushiPropName] = useState<string>('')
+      // onSuccess: (promocodes) => {
+      //   console.log(promocodes);
+      // },
+    });
 
-    // ДЛЯ ОТЛАДКИ ПРОМОКОДА
-    // ЕСЛИ ПРОМОКОД ЕСЛИ false, выдаст уведомление ЕСЛИ ЛЮБОЕ ДРУГОЕ (В ТОМ ЧИСЛЕ ПОУСТОЕ - БУДЕТ СПИН)
-    const [promoAccess, setPromoAccess] = useState<boolean>(true)
-    const [promoInput, setPromoInput] = useState<string>('')
+  // промокод
+  const [promoAccess, setPromoAccess] = useState<boolean>(true)
+  const [promocode, setPromocode] = useState<string>('')
+  const [propPromocode, setPropPromocode] = useState<string>('')
+  const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) =>{
+    setPromoAccess(true)
+    setPromocode(event.target.value)
+  }
 
-    const handlePromoInput = (event: React.ChangeEvent<HTMLInputElement>) =>{
-        setPromoInput(event.target.value)
-        setPromoAccess(true)
+  // получение приза по промокоду
+    const { 
+      refetch: refetchWinner 
+    } = useQuery<ItemsInterface>({
+      queryKey: ['get-winner', promocode], // Добавляем promocode в queryKey для уникальности запроса
+      queryFn: () => getWinner(promocode),
+      enabled: false, // Отключаем автоматический вызов
+      staleTime: 1000 * 60 * 15,
+      refetchOnWindowFocus: false,
+      // onSuccess: (data) => {
+      //   console.log('Winner data:', data);
+      // },
+      onError: (error) => {
+        // Обработка ошибки
+        console.error('Error fetching winner:', error);
+        setPromoAccess(false);
+      }
+    });
+  
+  // модалка приза
+  const [modalPrizeShow, setModalPrizeShow] = useState<boolean>(false)
+  
+  const handleCloseModalCallback = () =>{
+    setModalPrizeShow(false)
+  }
+
+  // функция случайного выбора приза из allItems
+  const getItem = ():ItemsInterface =>{
+
+    if (!data || data.length === 0) return {description: '', id: 0, imageUrl: '', name: '', probability: 1, rarity: 'COMMON'}
+    const index = Math.floor(Math.random() * data.length)
+    return data[index]
+  }
+
+  const [items, setItems] = useState<ItemsInterface[]>([])              //массив элементов для показа в рулетке
+  const [isStarted, setIsStarted] = useState<boolean>(false)            //флаг крутится ли рулетка
+  const [pendingSpin, setPendingSpin] = useState<boolean>(false)        //флаг для запуска анимации прокрутки 
+  const listRef = useRef<HTMLUListElement>(null)                        //реф на юл для стилей и лисенеров
+  const [winnerPrize, setWinnerPrize] = useState<ItemsInterface>()
+
+  const winnerIndex = Math.floor(cells / 2);                            //индекс победной ячейки, он всегда по центру
+
+  // массив для рулетки, в середину засовываем выигрышный айтем
+  const generateSpinItems = (prizeName: string):ItemsInterface[] =>{
+    if (!data || data.length === 0) return [];
+    const newItems: ItemsInterface[] = Array.from({length: cells}, getItem)
+    const targetItem = data.find(item => item.name === prizeName)!
+    newItems[winnerIndex] = targetItem
+    return newItems
+  }
+
+  // при первом рендере создаём список айтемов
+  useEffect(() => {
+    if(!isLoading && data.length > 0){
+      setItems(generateSpinItems('Подарок 555'))
+    }
+  }, [])
+
+  // сброс позиции списка перед анимацией
+  const resetPosition = () =>{
+
+    const offset = startOffset * itemWidth;
+
+    if(!listRef.current) return;
+    listRef.current.style.transition = 'none'
+    listRef.current.style.left = '50%'
+    listRef.current.style.transform = `translate3d(${-offset}px, 0, 0)`
+    void listRef.current.offsetWidth
+  }
+
+  // запуск кручения рулетки
+ const start = async () => {
+    if (isStarted) return;
+    
+    // проверка на существование промокодов и статус загрузки
+    if (promocodesLoading || !promocodes){
+      return
     }
 
-    // ФУНКЦИЯ ПРОКРУТКИ ДЕЙСТВУЕТ СЛЕДУЮЩИМ ОБРАЗОМ. У НАС ЕСТЬ КОЛИЧЕСТВО rounds, ТО ЕСТЬ ПОЛНЫХ ПРОКРУТОВ РУЛЕТКИ
-    // НЕЗАВИСИМО ОТ ИХ КОЛИЧЕСТВА РУЛЕТКА БУДЕТ КРУТИТЬСЯ ОПРЕДЕЛЁННОЕ КОЛИЧЕСТВО ВРЕМЕНИ duration, ОТСЮДА НАХОДИМ
-    // СКОРОСТЬ И ПЛАВНОСТЬ ПРОКРУТКИ. РУЛЕТКА ЗАМЕДЛЯЕТ ХОД К КОНЦУ. КАЖДЫЙ ПРОКРУТ ПРОИСХОДИТ С ПЕРЕМЕШИВАНИЕМ В
-    // НАЧАЛЕ (function shuffle)
+    // проверка на наличие введённого промокода в промокодах
+    if (promocodes && !promocodes?.some(p => p.code === promocode)) {
+      setPromoAccess(false)
+      return;
+    }
 
-
-
-    // функция для прокрутки
-    const startSpinning = () => {
-        if (spinning) return;
-
-        // ТОЛЬКО ДЛЯ ОТЛАДКИ ПРОМОКОДА
-        if(promoInput !== 'wincode_1'){
-            setPromoAccess(false)
-            return
-        }
-
-        // ТУТ ПИСАТЬ КОД ДЛЯ ПРОМОКОДА
-
-        const newItems = shuffle(ORIGINAL_ITEMS);
+    try {
+      setIsStarted(true);
+      // Вызываем refetch для выполнения запроса
+      const { data } = await refetchWinner();
+      
+      if (data) {
+        // Если запрос успешен, запускаем анимацию рулетки
+        resetPosition();
+        const newItems = generateSpinItems(data.name);
         setItems(newItems);
-        setSpinning(true);
-
-        // Зафиксировать текущую ширину
-        fixedContainerWidth.current = containerRef.current?.offsetWidth ?? 0;
-
-        // количество прокруток
-        const rounds = 7 + Math.floor(Math.random() * 7);
-        const itemOffset = Math.floor(Math.random() * newItems.length) * ITEM_WIDTH;
-        const intraItemOffset = Math.random() * ITEM_WIDTH;
-
-        targetDistanceRef.current =
-            rounds * newItems.length * ITEM_WIDTH + itemOffset + intraItemOffset;
-    };
-
-    // обработка
-    useEffect(() => {
-        if (!spinning) return;
-
-        const totalDistance = targetDistanceRef.current;
-        const duration = 30000;
-        const startTime = performance.now();
-
-        const easeOutQuint = (t: number) => 1 - Math.pow(1 - t, 2);
-
-        const animate = () => {
-        const now = performance.now();
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easedProgress = easeOutQuint(progress);
-        const currentDistance = totalDistance * easedProgress;
-
-        setPosition(currentDistance);
-
-        if (progress < 1) {
-            requestAnimationFrame(animate);
-        } else {
-            setSpinning(false);
-
-            // используем зафиксированную ширину
-            // const center = currentDistance + fixedContainerWidth.current / 2;
-            // const index = Math.floor(center / ITEM_WIDTH) % items.length;
-
-            // console.log("Выпало:", items[index]);
-            // setSushiPropName(items[index].name)
-            setModalPrizeShow(true)
-        }
-    };
-
-        requestAnimationFrame(animate);
-    }, [spinning, items]);
-
-
-    // для размонтировки модального окна приза
-    const handleCloseModalCallback = () =>{
-        setModalPrizeShow(false)
+        
+        setTimeout(() => {
+          setPendingSpin(true);
+        }, 0);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setIsStarted(false);
     }
+  };
 
-    return(
+  useEffect(() => {
+    if(!pendingSpin || !listRef.current) return
+
+    // стоп позиция по центру 
+    const randomOffset = (Math.random() - 0.5) * itemWidth;
+    const stopPosition = -winnerIndex * itemWidth - itemWidth / 2 + randomOffset +  'px'
+
+    listRef.current.querySelectorAll('.roulette_strip_item').forEach(el => {
+      el.classList.remove('active')
+    })
+
+    // Анимации
+    listRef.current.style.transition = '10s cubic-bezier(0.21, 0.53, 0.29, 0.99)';
+    listRef.current.style.left = '50%';
+    listRef.current.style.transform = `translate3d(${stopPosition}, 0, 0)`;
+
+    const onTransitionEnd = (e: TransitionEvent) => {
+      if (e.propertyName !== 'transform') return; 
+
+      setIsStarted(false);
+      setPendingSpin(false);
+
+      // Добавляем класс active к выигрышному элементу (для подсветки ТЕСТ)
+      const liElements = listRef.current?.querySelectorAll('li') || [];
+      const winnerElement = liElements[winnerIndex];
+      winnerElement?.classList.add('active');
+
+      // Логируем выигрыш после подсветки (ТЕСТ)
+      setTimeout(() => {
+        setWinnerPrize(items[winnerIndex]); 
+        setModalPrizeShow(true)
+        setPropPromocode(promocode)
+        setPromocode('')
+      }, 0);
+
+      // Удаляем слушатель
+      listRef.current?.removeEventListener('transitionend', onTransitionEnd);
+    };
+
+    // слушатель для окончания анимации
+    listRef.current.addEventListener('transitionend', onTransitionEnd);
+
+    // размонтировка и снятия слушателя
+    return () => {
+      listRef.current?.removeEventListener('transitionend', onTransitionEnd);
+    };
+  }, [pendingSpin])
+ 
+  return (
     <div className="roulette">
-        <div className="roulette_inner">
-            <div className="roulete_indicator">
-                <img src={indicatorTop} alt="indicatorUp" />
-                <img src={indicatorBottom} alt="indicatorDown" />
-            </div>
-                <div className="roulette_container" ref={containerRef}>
-                    <div className="roulette_strip" style={{transform: `translateX(-${position % (items.length * ITEM_WIDTH)}px)`,}}>
-                        {items.concat(items).map((_, index: number) => (
-                        <div className="roulette_strip_item" key={index}>
-                            <RouletteItem />
-                        </div>
-                    ))}
-                </div>
-            </div>
+      <div className="roulette_inner">
+        <div className="roulete_indicator">
+          <img src={indicatorTop} alt="indicatorUp" />
+          <img src={indicatorBottom} alt="indicatorDown" />
         </div>
-
-        <div className="roulete_control">
-            <div className="roulete_control_promoContainer">
-                <div className="roulete_control_noPromo">{promoAccess? '\u00A0' : 'Kod promocyjny nie znaleziony'}</div>
-                <input type="text" className={promoAccess? "roulete_promocodeInput" : "roulete_promocodeInput noPromo"} placeholder="Enter a Promo Code" onChange={(event) => handlePromoInput(event)}/>
-            </div>
-            <button className="button_global_presset" onClick={startSpinning} disabled={spinning}>Spin a Wheel</button>
+        <div className="roulette_container">
+          <ul className="roulette_strip" ref={listRef}>
+            {!isLoading && items.length > 0 && items.map((item, index) => (
+              <li key={index} className="roulette_strip_item">
+                <RouletteItem item={item} />
+              </li>
+            ))}
+          </ul>
         </div>
+      </div>
 
-        {modalPrizeShow && <ModalSlider handleCloseModalCallback = {handleCloseModalCallback}/>}
+      <div className="roulete_control">
+        <div className="roulete_control_promoContainer">
+          <div className="roulete_control_noPromo">
+            {promoAccess ? '\u00A0' : 'Kod promocyjny nie znaleziony'}
+          </div>
+          <input
+            type="text"
+            value={promocode}
+            className={promoAccess ? 'roulete_promocodeInput' : 'roulete_promocodeInput noPromo'}
+            placeholder="Enter a Promo Code"
+            onChange={handlePromoInput}
+          />
+        </div>
+        <button className="button_global_presset" onClick={start}>
+          Spin a Wheel
+        </button>
+      </div>
+
+      {modalPrizeShow && winnerPrize && <ModalSlider handleCloseModalCallback={handleCloseModalCallback} data={winnerPrize} promocode={propPromocode}/>}
     </div>
-    )
-}
+  );
+};
 
-export default Roulette
+export default Roulette;

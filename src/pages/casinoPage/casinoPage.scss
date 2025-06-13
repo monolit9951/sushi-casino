@@ -1,10 +1,14 @@
 @use '../../assets/styles/globals.scss' as globals;
 
 .casino_main{
+    margin-top: 64px;
     background-image: url('../../assets/img/backgroundOptima.png');
     overscroll-behavior: none;
     background-attachment: fixed;
     color: white;
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
     // background-color: black;
     // background-repeat: no-repeat;
     //  background-size: cover;
@@ -59,7 +63,7 @@
 }
 
 @media (max-width: 700px) {
-    main{
+    .casino_main{
         > .main_container{
             > .itemsList{
                 > .itemsList_list{
@@ -71,9 +75,4 @@
             }
         }
     }
-}
-
-// ОТСТУП ТАК КАК ХЕДЕР ФИКСИРОВАН
-.casino_main{
-    margin-top: 64px;
 }

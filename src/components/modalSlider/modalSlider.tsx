@@ -5,14 +5,18 @@ import './modalSlider.scss'
 import grabler from '../../assets/img/Grabber.svg'
 import copy from '../../assets/img/copy.svg'
 import alert from '../../assets/img/alert.svg'
-import { ItemsInterface } from "api/rouletteApi"
 import Item from "components/item/item"
+import { ItemsInterface } from "types"
 
 interface ModalSlideInterface {
     handleCloseModalCallback: () => void
+    data: ItemsInterface
+    promocode: string
 }
 
-const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback}) =>{
+const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback, data, promocode}) =>{
+
+    // генерация нового промокода
 
     // для отслеживания позиции 
     const [touchStartY, setTouchStartY] = useState<number | null>(null)
@@ -61,7 +65,7 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback}) =>{
 
     // инстакопирование кода по нажатию
     const handleCopyPromo = () => {
-        navigator.clipboard.writeText("FWOMR_42")
+        navigator.clipboard.writeText(promocode)
     }
 
 
@@ -84,10 +88,10 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback}) =>{
 
                 <div className="modaSlider_content_container" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
                     <div className="modalSlider_prizeImg">
-                        <Item />
+                        <Item data = {data}/>
                     </div>
 
-                    <div className="modalSlider_heading">You Won Visit to Neptunes Massage!</div>
+                    <div className="modalSlider_heading">You Won {data.name}</div>
 
                     <div className="modalSlider_details">
                         <div className="modalSlider_details_heading">Details</div>
@@ -104,7 +108,7 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback}) =>{
                         </div>
 
                         <button className="modalSlider_details_promocodeCopy" onClick={handleCopyPromo}>
-                            <div className="modalSlider_details_promocodeCopy_promocode">FWOMR_42</div>
+                            <div className="modalSlider_details_promocodeCopy_promocode">{promocode}</div>
                             <img src={copy} alt="copy" />
                         </button>
 

@@ -1,8 +1,10 @@
 import axios from 'axios'
 import {
   Category, FetchedWorkingHours,
+  ItemsInterface,
   OrderToPost,
   Product,
+  promocodesInterfase,
   ReturnedOrder,
   ValidatedVoucher,
 } from '../types'
@@ -80,7 +82,6 @@ const getCategories = async (): Promise<Category[]> => {
 }
 
 const getWorkingHours = async (): Promise<FetchedWorkingHours> => {
-    console.log('BASE_URL:', BASE_URL)
   return new Promise((resolve, reject) => {
     apiClient
       .get('/working-hours')
@@ -106,4 +107,52 @@ const getDeliveryCost = async (): Promise<{deliveryPrice: number}> => {
   })
 }
 
-export { getProducts, getCategories, getProduct, postOrder, postVoucher, getWorkingHours, getDeliveryCost }
+
+const getItemsSet = async (): Promise<ItemsInterface[]> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get("/casino")
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getWinner = async (code: string): Promise<ItemsInterface> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get(`/casino/random?wincode=${code}`)
+
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+
+
+const getPromocodes = async (): Promise<promocodesInterfase[]> => {
+  return new Promise((resolve, reject) => {
+    apiClient
+      .get(`/wincode`, {
+        headers: {
+          'X-Secret': 'test-secret-key'
+        }
+      })
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+
+export { getProducts, getCategories, getProduct, postOrder, postVoucher, getWorkingHours, getDeliveryCost, getItemsSet, getWinner, getPromocodes}
