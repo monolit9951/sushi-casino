@@ -7,6 +7,8 @@ import ModalSlider from "../modalSlider/modalSlider";
 import { getPromocodes, getWinner} from "api";
 import { useQuery } from '@tanstack/react-query'
 import { ItemsInterface, promocodesInterfase } from "types";
+import sound from '../../assets/audio/roulette sound cs.mp3'
+import winSound from '../../assets/audio/winSound.mp3'
 
 interface RouletteInterface {
   isLoading: boolean;
@@ -115,6 +117,14 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
     void listRef.current.offsetWidth
   }
 
+  // звук
+  const soundEffect = new Audio(sound)
+  const winEffect = new Audio(winSound)
+  soundEffect.volume = 0.2
+  winEffect.volume = 0.2
+  soundEffect.loop = false
+  winEffect.loop = false
+
   // запуск кручения рулетки
  const start = async () => {
     if (isStarted) return;
@@ -130,6 +140,9 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
       return;
     }
 
+    soundEffect.currentTime = 0
+    soundEffect.play()
+
     try {
       setIsStarted(true);
       // Вызываем refetch для выполнения запроса
@@ -144,6 +157,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
         setTimeout(() => {
           setPendingSpin(true);
         }, 0);
+        
       }
     } catch (error) {
       console.error('Error:', error);
@@ -156,14 +170,14 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
 
     // стоп позиция по центру 
     const randomOffset = (Math.random() - 0.5) * itemWidth;
-    const stopPosition = -winnerIndex * itemWidth - itemWidth / 2 + randomOffset +  'px'
+    const stopPosition = -winnerIndex * itemWidth - itemWidth / 2 + randomOffset + 'px'
 
     listRef.current.querySelectorAll('.roulette_strip_item').forEach(el => {
       el.classList.remove('active')
     })
 
     // Анимации
-    listRef.current.style.transition = '10s cubic-bezier(0.21, 0.53, 0.29, 0.99)';
+    listRef.current.style.transition = '5s cubic-bezier(0.1, 0.53, 0.5, 0.9)';
     listRef.current.style.left = '50%';
     listRef.current.style.transform = `translate3d(${stopPosition}, 0, 0)`;
 
@@ -184,6 +198,9 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
         setModalPrizeShow(true)
         setPropPromocode(promocode)
         setPromocode('')
+        soundEffect.pause()
+        soundEffect.currentTime = 0
+        winEffect.play()
       }, 0);
 
       // Удаляем слушатель
