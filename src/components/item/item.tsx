@@ -1,7 +1,7 @@
 import { FC } from "react";
 import './item.scss'
 import { ItemsInterface } from "types";
-
+// import sushi from '../../assets/img/roulette/sushi.png'
 
 interface ItemInterface {
     data: ItemsInterface
@@ -9,9 +9,14 @@ interface ItemInterface {
 
 // вместо него можно переиспользовать rouleteItem, различия только в размерах (200/109)
 const Item: FC <ItemInterface> = ({data}) => {
+
+    console.log(data.imageUrl)
     return(
         <div className="item">
-            <img src={data.imageUrl} alt={data.name} />
+             <img 
+                src={`/images/roulette/${data.imageUrl}`} 
+                alt={data.name} 
+            />
         </div>
     )
 }

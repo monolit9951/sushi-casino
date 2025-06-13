@@ -12,7 +12,7 @@ const RouletteItem: FC<RouletteItemInterface> = ({ item }) => {
 
   return (
     <div className="rouletteItem">
-      <img src={''} alt={item.name || ''} />
+      <img src={`/images/roulette/${item.imageUrl}`}  alt={item.name || ''} />
     </div>
   );
 };
