@@ -16,7 +16,8 @@
         // align-items: center;
         > .roulette_container {
             overflow: hidden;
-        
+
+
             > .roulette_strip {
                 position: relative;
                 height: 100%;
@@ -25,7 +26,7 @@
                 transform: translate3d(0, 0, 0);
                 list-style: none;
                 transition: 5s cubic-bezier(0.21, 0.53, 0.29, 0.99);
-                
+
                 > .roulette_strip_item {
                     flex-shrink: 0;
                     display: flex;
@@ -42,6 +43,7 @@
                         height: 100px;
                         object-fit: cover;
                         border: 1px solid #555;
+
                     }
                 }
             }

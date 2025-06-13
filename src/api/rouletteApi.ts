@@ -6,6 +6,7 @@ import { ItemsInterface } from "types";
 // const BASE_URL = import.meta.env.VITE_APP_MAIN_API;
 const BASE_URL = "https://neptunessushi.com/api"
 
+
 const apiClient = axios.create({
   baseURL: BASE_URL,
   withCredentials: false,

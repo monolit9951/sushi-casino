@@ -9,7 +9,7 @@ import {
   ValidatedVoucher,
 } from '../types'
 
-const BASE_URL = "https://neptunessushi.com/api"
+const BASE_URL = '/api'
 
 const apiClient = axios.create({
   baseURL: BASE_URL,

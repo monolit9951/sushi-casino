@@ -2,6 +2,7 @@ import { FC } from "react";
 import './item.scss'
 import { ItemsInterface } from "types";
 
+
 interface ItemInterface {
     data: ItemsInterface
 }
