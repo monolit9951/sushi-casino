@@ -23,20 +23,8 @@ const itemWidth = 216
 // начальный индекс прокрутки, чтоб слева не было пропусковы
 const startOffset = 5
 
-const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
+const Roulette: FC<RouletteInterface> = ({ isLoading, data }) => {
 
-  // получение промокодов
-    const { data: promocodes, isLoading: promocodesLoading} = useQuery<promocodesInterfase[]>({
-      queryKey: ['get-promocodes'],
-      queryFn: getPromocodes,
-      enabled: true,
-      staleTime: 1000 * 60 * 15,
-      refetchOnWindowFocus: false,
-
-      // onSuccess: (promocodes) => {
-      //   console.log(promocodes);
-      // },
-    });
 
   // промокод
   const [promoAccess, setPromoAccess] = useState<boolean>(true)
@@ -56,9 +44,9 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
       enabled: false, // Отключаем автоматический вызов
       staleTime: 1000 * 60 * 15,
       refetchOnWindowFocus: false,
-      onSuccess: (data) => {
-        console.log('Winner data:', data);
-      },
+      // onSuccess: (data) => {
+      //   console.log('Winner data:', data);
+      // },
       onError: (error) => {
         // Обработка ошибки
         console.error('Error fetching winner:', error);
@@ -76,7 +64,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   // функция случайного выбора приза из allItems
   const getItem = ():ItemsInterface =>{
 
-    if (!data || data.length === 0) return {description: '', id: 0, imageUrl: '', name: '', probability: 1, rarity: 'COMMON'}
+    if (!data || data.length === 0) return {description: '', id: 0, imageUrl: '', name: '', probability: 1, rarity: 'COMMON', expired: false, details: '', rulesOfUse: ''}
     const index = Math.floor(Math.random() * data.length)
     return data[index]
   }
@@ -130,15 +118,6 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   // запуск кручения рулетки
  const start = async () => {
     if (isStarted) return;
-
-    // проверка на существование промокодов и статус загрузки
-
-    // проверка на наличие введённого промокода в промокодах
-    // if (promocodes && !promocodes?.some(p => p.code === promocode)) {
-    //   setPromoAccess(false)
-    //   return;
-    // }
-
     setIsCheckingPromo(true)
 
     try {

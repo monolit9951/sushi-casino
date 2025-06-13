@@ -18,7 +18,6 @@ const AppHeader = () => {
   const HIDE_LAYOUT_ROUTES = ['/roulette']
   const location = useLocation()
   const hideLayout = HIDE_LAYOUT_ROUTES.includes(location.pathname)
-  console.log('hideLayout:', hideLayout)
 
   const stickyStyle = {
     top: 0,
