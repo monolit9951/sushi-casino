@@ -56,9 +56,9 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
       enabled: false, // Отключаем автоматический вызов
       staleTime: 1000 * 60 * 15,
       refetchOnWindowFocus: false,
-      // onSuccess: (data) => {
-      //   console.log('Winner data:', data);
-      // },
+      onSuccess: (data) => {
+        console.log('Winner data:', data);
+      },
       onError: (error) => {
         // Обработка ошибки
         console.error('Error fetching winner:', error);
@@ -86,6 +86,8 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   const [pendingSpin, setPendingSpin] = useState<boolean>(false)        //флаг для запуска анимации прокрутки 
   const listRef = useRef<HTMLUListElement>(null)                        //реф на юл для стилей и лисенеров
   const [winnerPrize, setWinnerPrize] = useState<ItemsInterface>()
+  const [isCheckingPromo, setIsCheckingPromo] = useState(false);        //если промо неверное, финальный эррор идёт долго, потому мы делаем лоадинг
+
 
   const winnerIndex = Math.floor(cells / 2);                            //индекс победной ячейки, он всегда по центру
 
@@ -128,28 +130,33 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
   // запуск кручения рулетки
  const start = async () => {
     if (isStarted) return;
-    
+
     // проверка на существование промокодов и статус загрузки
-    if (promocodesLoading || !promocodes){
-      return
-    }
 
     // проверка на наличие введённого промокода в промокодах
-    if (promocodes && !promocodes?.some(p => p.code === promocode)) {
-      setPromoAccess(false)
-      return;
-    }
+    // if (promocodes && !promocodes?.some(p => p.code === promocode)) {
+    //   setPromoAccess(false)
+    //   return;
+    // }
 
-    soundEffect.currentTime = 0
-    soundEffect.play()
+    setIsCheckingPromo(true)
 
     try {
       setIsStarted(true);
       // Вызываем refetch для выполнения запроса
-      const { data } = await refetchWinner();
-      
+      const { data } = await refetchWinner({throwOnError: true});
+            
       if (data) {
         // Если запрос успешен, запускаем анимацию рулетки
+
+        // если промокод уже вводился, стоп и сразу вывод приза
+        if (data.expired){
+          setIsStarted(false)
+          setPropPromocode('expired')
+          setWinnerPrize(data)
+          setModalPrizeShow(true)
+          return
+        }
         resetPosition();
         const newItems = generateSpinItems(data.name);
         setItems(newItems);
@@ -157,11 +164,17 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
         setTimeout(() => {
           setPendingSpin(true);
         }, 0);
+
+        soundEffect.currentTime = 0
+        soundEffect.play()
         
       }
     } catch (error) {
       console.error('Error:', error);
+      setPromoAccess(false)
       setIsStarted(false);
+    } finally {
+      setIsCheckingPromo(false)
     }
   };
 
@@ -176,7 +189,7 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
       el.classList.remove('active')
     })
 
-    // Анимации
+    // Анимации (ЕСЛИ МЕНЯЕТЕ ТО ПОДСТРАИВАЙТЕ ПОД АУДИО, ПЕРВЫЕ ДВА ЗНАЧЕНИЯ В СКОБКАХ УСКОРЕНИЕ, ПОСЛЕДНИЕ - ЗАМЕДЛЕНИЕ)
     listRef.current.style.transition = '5s cubic-bezier(0.1, 0.53, 0.5, 0.9)';
     listRef.current.style.left = '50%';
     listRef.current.style.transform = `translate3d(${stopPosition}, 0, 0)`;
@@ -236,13 +249,13 @@ const Roulette: FC<RouletteInterface> = ({ isLoading, data, isError }) => {
 
       <div className="roulete_control">
         <div className="roulete_control_promoContainer">
-          <div className="roulete_control_noPromo">
-            {promoAccess ? '\u00A0' : 'Kod promocyjny nie znaleziony'}
+          <div className={isCheckingPromo? "roulete_control_noPromo checking":"roulete_control_noPromo"}>
+            {isCheckingPromo? 'Kontrola': promoAccess ? '\u00A0' : 'Kod promocyjny nie znaleziony'}
           </div>
           <input
             type="text"
             value={promocode}
-            className={promoAccess ? 'roulete_promocodeInput' : 'roulete_promocodeInput noPromo'}
+            className={isCheckingPromo? "roulete_promocodeInput checking" : (promoAccess ? 'roulete_promocodeInput' : 'roulete_promocodeInput noPromo')}
             placeholder="Enter a Promo Code"
             onChange={handlePromoInput}
           />

@@ -86,6 +86,10 @@
                 color: globals.$color-red;
                 font-size: 12px;
                 font-weight: 400;
+
+                &.checking{
+                    color: #12707a;
+                }
             }
 
             > .roulete_promocodeInput{
@@ -112,6 +116,10 @@
 
                 &.noPromo {
                     border: 1px solid globals.$color-red;
+                }
+
+                &.checking{
+                    border: 1px solid #12707a;
                 }
             }
         }

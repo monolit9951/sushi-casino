@@ -9,8 +9,6 @@ interface ItemInterface {
 
 // вместо него можно переиспользовать rouleteItem, различия только в размерах (200/109)
 const Item: FC <ItemInterface> = ({data}) => {
-
-    console.log(data.imageUrl)
     return(
         <div className="item">
              <img 

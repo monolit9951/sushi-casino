@@ -14,6 +14,7 @@ const BASE_URL = 'https://neptunessushi.com/api'
 const apiClient = axios.create({
   baseURL: BASE_URL,
   withCredentials: false,
+  validateStatus: (status) => status < 500
 })
 
 const postOrder = async (orderObj: OrderToPost): Promise<ReturnedOrder> => {
@@ -122,21 +123,17 @@ const getItemsSet = async (): Promise<ItemsInterface[]> => {
 };
 
 const getWinner = async (code: string): Promise<ItemsInterface> => {
-  return new Promise((resolve, reject) => {
-    apiClient
-      .get(`/casino/random?wincode=${code}`)
+  const response = await apiClient.get(`/casino/random?wincode=${code}`);
 
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  if (response.status === 404) {
+    throw new Error('PROMOCODE_NOT_FOUND');
+  }
+
+  return response.data;
 };
 
 
-
+// не использовать, для прошлых версий
 const getPromocodes = async (): Promise<promocodesInterfase[]> => {
   return new Promise((resolve, reject) => {
     apiClient

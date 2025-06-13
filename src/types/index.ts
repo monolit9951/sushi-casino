@@ -169,12 +169,15 @@ interface promocodesInterfase{
 type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
 
 interface ItemsInterface {
-  description: string;
-  id: number;
-  imageUrl: string;
-  name: string;
-  probability: number;
-  rarity: Rarity;
+  description: string
+  id: number
+  imageUrl: string
+  name: string
+  probability: number
+  rarity: Rarity
+  expired: boolean
+  rulesOfUse: string
+  details: string
 }
 
 type BasketTypes = 'basket' | 'delivery' | 'pay' | 'orderResponse'

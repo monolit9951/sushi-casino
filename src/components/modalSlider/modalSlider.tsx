@@ -95,17 +95,13 @@ const ModalSlider: FC <ModalSlideInterface>= ({handleCloseModalCallback, data, p
 
                     <div className="modalSlider_details">
                         <div className="modalSlider_details_heading">Details</div>
-                        <div className="modalSlider_details_info">Located at: Warsaw, Grochowska 207, 225. Website - google.com.</div>
+                        <div className="modalSlider_details_info">{data.details}</div>
                     </div>
 
                     <div className="modalSlider_details">
                         <div className="modalSlider_details_heading">Rules of Use</div>
 
-                        <div className="modalSlider_details_info">
-                            In order to use the massage, you need to 
-                            say/indicate your winning promo code when 
-                            making an appointment at the salon.
-                        </div>
+                        <div className="modalSlider_details_info">{data.rulesOfUse}</div>
 
                         <button className="modalSlider_details_promocodeCopy" onClick={handleCopyPromo}>
                             <div className="modalSlider_details_promocodeCopy_promocode">{promocode}</div>
