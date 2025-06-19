@@ -1,0 +1,31 @@
+.successfulOrder {
+    padding: 0 91px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin-bottom: 64px;
+
+    > .successfulOrder_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    > .successfulOrder_container > .successfulOrder_suggest {
+        font-size: 50px;
+        line-height: 53px;
+        font-weight: 900;
+        word-break: break-word;
+        white-space: normal;
+    }
+}
+
+@media (max-width: 1050px) {
+    .successfulOrder{
+        padding: 0 16px;
+    }
+}

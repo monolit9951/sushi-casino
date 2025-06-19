@@ -10,6 +10,7 @@ import NewsItemPage from '../modules/News/components/NewsItemPage'
 import Reglament from "../pages/Reglament";
 import Privacy from "../pages/Privacy";
 import Casino from 'pages/casinoPage/casinoPage'
+import SuccessfulOrderPage from 'pages/successfulOrderPage/successfulOrderPage'
 
 const ROUTER_CONFIG = [
   {
@@ -82,6 +83,12 @@ const ROUTER_CONFIG = [
     name: 'Roulette',
     path: '/roulette',
     component: Casino,
+    exact: true,
+  },
+  {
+    name: 'Order',
+    path: '/order',
+    component: SuccessfulOrderPage,
     exact: true,
   }
 ]
